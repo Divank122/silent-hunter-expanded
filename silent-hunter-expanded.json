@@ -1,0 +1,13 @@
+{
+    "id": "silent-hunter-expanded",
+    "name": "Silent Hunter Expanded",
+    "author": "Placeholder",
+    "description": "为静默猎手添加约20张新卡牌",
+    "version": "1.0.0",
+    "has_pck": true,
+    "has_dll": true,
+    "dependencies": [
+        "BaseLib"
+    ],
+    "affects_gameplay": true
+}
