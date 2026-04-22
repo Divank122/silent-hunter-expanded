@@ -10,13 +10,14 @@ config_version=5
 
 [application]
 
-config/name="silent-hunter-expanded"
+config/name="Ultimate Silent Card Expansion"
 config/features=PackedStringArray("4.5", "C#", "Mobile")
 config/icon="res://icon.svg"
+text_resources_conversion/disable_binary_conversion=true
 
 [dotnet]
 
-project/assembly_name="silent-hunter-expanded"
+project/assembly_name="UltimateSilentCardExpansion"
 
 [rendering]
 
