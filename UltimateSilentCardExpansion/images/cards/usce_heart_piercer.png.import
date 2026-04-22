@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dilo6hq5autlb"
-path="res://.godot/imported/usce_bane_power.png-fdbc193c4dcf406b56f0d790c7308a3a.ctex"
+uid="uid://dkyltajlef8ne"
+path="res://.godot/imported/usce_heart_piercer.png-08557f445c167808b65fa30f0c628f7a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UltimateSilentCardExpansion/images/powers/usce_bane_power.png"
-dest_files=["res://.godot/imported/usce_bane_power.png-fdbc193c4dcf406b56f0d790c7308a3a.ctex"]
+source_file="res://UltimateSilentCardExpansion/images/cards/usce_heart_piercer.png"
+dest_files=["res://.godot/imported/usce_heart_piercer.png-08557f445c167808b65fa30f0c628f7a.ctex"]
 
 [params]
 

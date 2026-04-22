@@ -31,6 +31,8 @@ public abstract class SilentCardModel : CustomCardModel
             {
                 $"res://images/cards/{entryName}.png",
                 $"res://images/cards/{entryName}.jpg",
+                $"res://UltimateSilentCardExpansion/images/cards/usce_{entryName}.png",
+                $"res://UltimateSilentCardExpansion/images/cards/usce_{entryName}.jpg",
                 $"res://UltimateSilentCardExpansion/images/cards/{entryName}.png",
                 $"res://UltimateSilentCardExpansion/images/cards/{entryName}.jpg",
             };
