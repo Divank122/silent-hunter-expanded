@@ -13,6 +13,7 @@ public class Entry
         var harmony = new Harmony("sts2.usce");
         harmony.PatchAll();
         ScriptManagerBridge.LookupScriptsInAssembly(typeof(Entry).Assembly);
+
         Log.Info("[USCE] Initialized!");
     }
 }

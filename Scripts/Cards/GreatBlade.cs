@@ -1,0 +1,99 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BaseLib.Abstracts;
+using BaseLib.Utils;
+using Godot;
+using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.CardPools;
+using MegaCrit.Sts2.Core.Models.Cards;
+using MegaCrit.Sts2.Core.Models.Characters;
+using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
+using MegaCrit.Sts2.Core.ValueProps;
+
+namespace USCE.Scripts.Cards;
+
+[Pool(typeof(TokenCardPool))]
+public sealed class GreatBlade : SilentCardModel
+{
+    public override TargetType TargetType => TargetType.AnyEnemy;
+
+    protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Shiv };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    [
+        new DamageVar(16m, ValueProp.Move),
+        new CalculationBaseVar(0m),
+        new CalculationExtraVar(1m)
+    ];
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords =>
+        new HashSet<CardKeyword> { CardKeyword.Exhaust, CardKeyword.Retain };
+
+    public override List<(string, string)>? Localization => LocManager.Instance.Language switch
+    {
+        "zhs" => new CardLoc("巨刀", "造成{Damage:diff()}点伤害。"),
+        _ => new CardLoc("Great Blade", "Deal {Damage:diff()} damage.")
+    };
+
+    public GreatBlade() : base(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)
+    {
+    }
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
+
+        var attackCommand = DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+            .FromCard(this)
+            .Targeting(cardPlay.Target)
+            .WithHitVfxNode((Creature t) => NShivThrowVfx.Create(Owner.Creature, t, Colors.Gold));
+
+        if (Owner.Character is Silent)
+        {
+            attackCommand.WithAttackerAnim("Shiv", 0.2f);
+        }
+
+        await attackCommand.Execute(choiceContext);
+    }
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars.Damage.UpgradeValueBy(4m);
+    }
+
+    public static async Task<CardModel?> CreateInHand(Player owner, CombatState combatState)
+    {
+        return (await CreateInHand(owner, 1, combatState)).FirstOrDefault();
+    }
+
+    public static async Task<IEnumerable<CardModel>> CreateInHand(Player owner, int count, CombatState combatState)
+    {
+        if (count == 0)
+        {
+            return Array.Empty<CardModel>();
+        }
+        if (CombatManager.Instance.IsOverOrEnding)
+        {
+            return Array.Empty<CardModel>();
+        }
+
+        List<CardModel> blades = new List<CardModel>();
+        for (int i = 0; i < count; i++)
+        {
+            blades.Add(combatState.CreateCard<GreatBlade>(owner));
+        }
+        await CardPileCmd.AddGeneratedCardsToCombat(blades, PileType.Hand, addedByPlayer: true);
+        return blades;
+    }
+}
