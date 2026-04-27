@@ -13,7 +13,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace USCE.Scripts.Powers;
 
-public class HeartPiercerPower : CustomPowerModel, ILocalizationProvider
+public class HeartPiercerPower : CustomPowerModel
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;

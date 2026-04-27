@@ -14,7 +14,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace USCE.Scripts.Powers;
 
-public class BanePower : CustomPowerModel, ILocalizationProvider
+public class BanePower : CustomPowerModel
 {
     public BanePower()
     {
