@@ -74,7 +74,15 @@ public static class ShivCreateInHandPatches
         }
 
         _playersWhoGotGreatBladeThisCard.Add(owner);
-        __result = CreateGreatBladesInstead(owner, bladeMountainPower);
+        
+        if (_currentPlayingCard != null)
+        {
+            __result = CreateGreatBladesInstead(owner, bladeMountainPower, 1);
+        }
+        else
+        {
+            __result = CreateGreatBladesInstead(owner, bladeMountainPower, count);
+        }
         return false;
     }
 
@@ -88,9 +96,9 @@ public static class ShivCreateInHandPatches
         return null;
     }
 
-    private static async Task<IEnumerable<CardModel>> CreateGreatBladesInstead(Player owner, BladeMountainPower bladeMountainPower)
+    private static async Task<IEnumerable<CardModel>> CreateGreatBladesInstead(Player owner, BladeMountainPower bladeMountainPower, int count)
     {
-        return await bladeMountainPower.CreateGreatBladesInstead(owner, 1);
+        return await bladeMountainPower.CreateGreatBladesInstead(owner, count);
     }
 }
 

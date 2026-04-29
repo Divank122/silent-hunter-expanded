@@ -54,17 +54,17 @@ public class BladeMountainPower : CustomPowerModel
 
     public bool IsUpgraded { get; set; } = false;
 
-    public async Task<IEnumerable<CardModel>> CreateGreatBladesInstead(Player owner, int originalCount)
+    public async Task<IEnumerable<CardModel>> CreateGreatBladesInstead(Player owner, int count)
     {
         var combatState = owner.Creature.CombatState;
         if (combatState == null)
         {
             return System.Array.Empty<CardModel>();
         }
-
+        
         if (IsUpgraded)
         {
-            var blades = await GreatBlade.CreateInHand(owner, 1, combatState);
+            var blades = await GreatBlade.CreateInHand(owner, count, combatState);
             foreach (var blade in blades)
             {
                 blade.UpgradeInternal();
@@ -72,6 +72,6 @@ public class BladeMountainPower : CustomPowerModel
             }
             return blades;
         }
-        return await GreatBlade.CreateInHand(owner, 1, combatState);
+        return await GreatBlade.CreateInHand(owner, count, combatState);
     }
 }
