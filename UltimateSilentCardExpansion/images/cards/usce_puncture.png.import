@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://8uqko5wo0rcr"
-path="res://.godot/imported/usce_puncture.jpg-a902d00940f42b12eafef448fcd5a547.ctex"
+uid="uid://dyqu5xjy8am1q"
+path="res://.godot/imported/usce_puncture.png-1deeeb6963bb4ec74638851b9f4e168a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UltimateSilentCardExpansion/images/cards/usce_puncture.jpg"
-dest_files=["res://.godot/imported/usce_puncture.jpg-a902d00940f42b12eafef448fcd5a547.ctex"]
+source_file="res://UltimateSilentCardExpansion/images/cards/usce_puncture.png"
+dest_files=["res://.godot/imported/usce_puncture.png-1deeeb6963bb4ec74638851b9f4e168a.ctex"]
 
 [params]
 

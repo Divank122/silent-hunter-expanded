@@ -33,8 +33,8 @@ public class Puncture : SilentCardModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("扎透", "造成{Damage:diff()}点伤害{Repeat:diff()}次。\n通过奇巧打出时，改为造成{SlyDamage:diff()}点伤害。"),
-        _ => new CardLoc("Puncture", "Deal {Damage:diff()} damage {Repeat:diff()} times.\nWhen played via Sly, deal {SlyDamage:diff()} damage instead.")
+        "zhs" => new CardLoc("扎透", "造成{Damage:diff()}点伤害{Repeat:diff()}次。\n通过[gold]奇巧[/gold]打出时，改为造成{SlyDamage:diff()}点伤害。"),
+        _ => new CardLoc("Puncture", "Deal {Damage:diff()} damage {Repeat:diff()} times.\nWhen played via [gold]Sly[/gold], deal {SlyDamage:diff()} damage instead.")
     };
 
     public Puncture() : base(energyCost, type, rarity, targetType)
