@@ -30,8 +30,8 @@ public class SpiderWeb : SilentCardModel, ILocalizationProvider
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("蛛网", "给予{WeakAmount:diff()}层[gold]虚弱[/gold]。\n你在这个回合内每次对该名敌人造成伤害时，额外给予1层[gold]虚弱[/gold]。"),
-        _ => new CardLoc("Spider Web", "Apply {WeakAmount:diff()} [gold]Weak[/gold].\nEach time you deal damage to that enemy this turn, apply 1 additional [gold]Weak[/gold].")
+        "zhs" => new CardLoc("蛛网", "给予{WeakAmount:diff()}层[gold]虚弱[/gold]。\n你在这个回合内每次对该名敌人造成伤害时，额外给予{WeakAmount:diff()}层[gold]虚弱[/gold]。"),
+        _ => new CardLoc("Spider Web", "Apply {WeakAmount:diff()} [gold]Weak[/gold].\nEach time you deal damage to that enemy this turn, apply {WeakAmount:diff()} additional [gold]Weak[/gold].")
     };
 
     public SpiderWeb() : base(energyCost, type, rarity, targetType)
@@ -42,12 +42,13 @@ public class SpiderWeb : SilentCardModel, ILocalizationProvider
     {
         if (cardPlay.Target == null) return;
 
-        await PowerCmd.Apply<WeakPower>(cardPlay.Target, DynamicVars["WeakAmount"].IntValue, Owner.Creature, this);
+        int weakAmount = DynamicVars["WeakAmount"].IntValue;
+        await PowerCmd.Apply<WeakPower>(cardPlay.Target, weakAmount, Owner.Creature, this);
         
-        var power = await PowerCmd.Apply<SpiderWebPower>(Owner.Creature, 1, Owner.Creature, this);
+        var power = await PowerCmd.Apply<SpiderWebPower>(cardPlay.Target, weakAmount, Owner.Creature, this);
         if (power != null)
         {
-            power.TargetEnemy = cardPlay.Target;
+            power.SourcePlayer = Owner.Creature;
         }
     }
 

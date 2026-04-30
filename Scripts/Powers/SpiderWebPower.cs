@@ -14,23 +14,23 @@ namespace USCE.Scripts.Powers;
 
 public class SpiderWebPower : CustomPowerModel
 {
-    public override PowerType Type => PowerType.Buff;
+    public override PowerType Type => PowerType.Debuff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
     public override string? CustomPackedIconPath => "res://UltimateSilentCardExpansion/images/powers/usce_spider_web_power.png";
     public override string? CustomBigIconPath => "res://UltimateSilentCardExpansion/images/powers/usce_spider_web_power.png";
 
-    public Creature? TargetEnemy { get; set; }
+    public Creature? SourcePlayer { get; set; }
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new PowerLoc("蛛网", "你在这个回合内每次对该名敌人造成伤害时，额外给予1层虚弱。", "你在这个回合内每次对该名敌人造成伤害时，额外给予[blue]{Amount}[/blue]层[gold]虚弱[/gold]。"),
-        _ => new PowerLoc("Spider Web", "Each time you deal damage to that enemy this turn, apply 1 Weak.", "Each time you deal damage to that enemy this turn, apply [blue]{Amount}[/blue] [gold]Weak[/gold].")
+        "zhs" => new PowerLoc("蛛网", "本回合内每次被攻击时，获得1层虚弱。", "本回合内每次被攻击时，获得[blue]{Amount}[/blue]层[gold]虚弱[/gold]。"),
+        _ => new PowerLoc("Spider Web", "Each time attacked this turn, gain 1 Weak.", "Each time attacked this turn, gain [blue]{Amount}[/blue] [gold]Weak[/gold].")
     };
 
     public override async Task AfterAttack(AttackCommand command)
     {
-        if (command.Attacker != Owner || command.TargetSide == Owner.Side)
+        if (SourcePlayer == null || command.Attacker != SourcePlayer)
         {
             return;
         }
@@ -40,20 +40,14 @@ public class SpiderWebPower : CustomPowerModel
             return;
         }
 
-        if (TargetEnemy == null || TargetEnemy.IsDead)
-        {
-            return;
-        }
-
         foreach (DamageResult result in command.Results)
         {
-            if (result.Receiver == TargetEnemy && result.TotalDamage > 0)
+            if (result.Receiver == Owner && result.TotalDamage > 0)
             {
-                await PowerCmd.Apply<WeakPower>(result.Receiver, Amount, Owner, null);
+                await PowerCmd.Apply<WeakPower>(Owner, Amount, SourcePlayer, null);
+                Flash();
             }
         }
-
-        Flash();
     }
 
     public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
