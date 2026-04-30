@@ -25,8 +25,8 @@ public class Puncture : SilentCardModel
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(2m, ValueProp.Move),
-        new RepeatVar(7),
-        new DynamicVar("SlyDamage", 14m)
+        new RepeatVar(6),
+        new DynamicVar("SlyDamage", 12m)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Sly];

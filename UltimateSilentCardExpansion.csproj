@@ -32,5 +32,6 @@
     <MakeDir Directories="$(Sts2Dir)\mods\UltimateSilentCardExpansion\" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(Sts2Dir)\mods\UltimateSilentCardExpansion\" />
     <Copy SourceFiles="UltimateSilentCardExpansion.json" DestinationFolder="$(Sts2Dir)\mods\UltimateSilentCardExpansion\" />
+    <Copy SourceFiles="UltimateSilentCardExpansion.pck" DestinationFolder="$(Sts2Dir)\mods\UltimateSilentCardExpansion\" Condition="Exists('UltimateSilentCardExpansion.pck')" />
   </Target>
 </Project>

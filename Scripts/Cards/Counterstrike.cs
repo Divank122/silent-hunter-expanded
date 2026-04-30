@@ -37,7 +37,7 @@ public class Counterstrike : SilentCardModel, ILocalizationProvider
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(27m, ValueProp.Move)
+        new DamageVar(25m, ValueProp.Move)
     ];
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
@@ -70,6 +70,6 @@ public class Counterstrike : SilentCardModel, ILocalizationProvider
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(5m);
+        DynamicVars.Damage.UpgradeValueBy(4m);
     }
 }

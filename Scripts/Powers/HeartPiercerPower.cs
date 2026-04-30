@@ -46,7 +46,7 @@ public class HeartPiercerPower : CustomPowerModel
 
         foreach (DamageResult result in command.Results)
         {
-            if (result.UnblockedDamage > 0 && !result.Receiver.IsDead)
+            if (result.TotalDamage > 0 && !result.Receiver.IsDead)
             {
                 await PowerCmd.Apply<PoisonPower>(result.Receiver, Amount, Owner, null);
             }
