@@ -1,3 +1,4 @@
 {
-  "USCE-HANDY.selectionScreenPrompt": "选择{Amount}张牌放入手牌并丢弃。"
+  "USCE-HANDY.selectionScreenPrompt": "选择{Amount}张牌放入手牌并丢弃。",
+  "USCE-SYNTHESIZE.selectionScreenPrompt": "选择一张攻击牌进行转化。"
 }

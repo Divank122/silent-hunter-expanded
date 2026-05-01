@@ -1,0 +1,80 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using HarmonyLib;
+using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Hooks;
+using MegaCrit.Sts2.Core.Models;
+
+namespace USCE.Scripts.Patches;
+
+[HarmonyPatch(typeof(CardModel))]
+public static class CardModelPatch
+{
+    private static readonly HashSet<CardModel> SynthesizedCards = new();
+
+    public static void MarkAsSynthesized(CardModel card)
+    {
+        SynthesizedCards.Add(card);
+    }
+
+    public static bool IsSynthesized(CardModel card)
+    {
+        return SynthesizedCards.Contains(card);
+    }
+
+    [HarmonyPatch("GetDescriptionForPile", typeof(PileType), typeof(Creature))]
+    [HarmonyPostfix]
+    public static void GetDescriptionForPilePostfix(CardModel __instance, ref string __result)
+    {
+        if (IsSynthesized(__instance))
+        {
+            __result = "重复X次：\n" + __result;
+        }
+    }
+}
+
+[HarmonyPatch(typeof(Hook))]
+public static class HookPatch
+{
+    [HarmonyPatch("ModifyCardPlayCount")]
+    [HarmonyPostfix]
+    public static void ModifyCardPlayCountPostfix(CombatState combatState, CardModel card, int playCount, Creature? target, List<AbstractModel> modifyingModels, ref int __result)
+    {
+        if (CardModelPatch.IsSynthesized(card) && card.EnergyCost.CostsX)
+        {
+            int xValue = card.ResolveEnergyXValue();
+            __result = playCount * xValue;
+        }
+    }
+}
+
+[HarmonyPatch(typeof(CardEnergyCost))]
+public static class CardEnergyCostPatch
+{
+    private static readonly FieldInfo CostsXField = AccessTools.Field(typeof(CardEnergyCost), "<CostsX>k__BackingField");
+    private static readonly FieldInfo BaseField = AccessTools.Field(typeof(CardEnergyCost), "_base");
+    private static readonly MethodInfo InvokeEnergyCostChangedMethod = AccessTools.Method(typeof(CardModel), "InvokeEnergyCostChanged");
+    private static readonly FieldInfo CardField = AccessTools.Field(typeof(CardEnergyCost), "_card");
+
+    public static void SetCostsX(this CardEnergyCost cost, bool value)
+    {
+        var card = (CardModel)CardField.GetValue(cost);
+        card.AssertMutable();
+        
+        CostsXField.SetValue(cost, value);
+        
+        if (value)
+        {
+            BaseField.SetValue(cost, 0);
+        }
+        else
+        {
+            BaseField.SetValue(cost, cost.Canonical);
+        }
+        
+        InvokeEnergyCostChangedMethod.Invoke(card, null);
+    }
+}
