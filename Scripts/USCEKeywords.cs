@@ -7,4 +7,7 @@ public class USCEKeywords
 {
     [CustomEnum("Thirsty")] [KeywordProperties(AutoKeywordPosition.After)]
     public static CardKeyword Thirsty;
+
+    [CustomEnum("Sluggish")] [KeywordProperties(AutoKeywordPosition.After)]
+    public static CardKeyword Sluggish;
 }

@@ -20,6 +20,8 @@ public class Sedative : SilentCardModel, ILocalizationProvider
     private const CardRarity rarity = CardRarity.Rare;
     private const TargetType targetType = TargetType.Self;
 
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [USCEKeywords.Sluggish];
+
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
         "zhs" => new CardLoc("镇静剂", "抽牌直到抽满[gold]手牌[/gold]。\n这张牌在本场战斗中的耗能增加{energyPrefix:energyIcons(1)}。"),
