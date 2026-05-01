@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
+using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
@@ -16,6 +18,12 @@ public class FlayPower : CustomPowerModel
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromPower<PoisonPower>(),
+        HoverTipFactory.FromPower<WeakPower>()
+    ];
 
     public override string? CustomPackedIconPath => "res://UltimateSilentCardExpansion/images/powers/usce_flay_power.png";
     public override string? CustomBigIconPath => "res://UltimateSilentCardExpansion/images/powers/usce_flay_power.png";
