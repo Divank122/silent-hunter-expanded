@@ -34,6 +34,18 @@
 - Godot 4.5.1 (Mono 版本)
 - .NET 9.0 SDK
 
+### 配置游戏路径
+
+项目默认假设游戏安装在 Steam 默认路径：
+```
+D:\Program Files (x86)\Steam\steamapps\common\Slay the Spire 2
+```
+
+如果你的游戏安装在其他位置，需要修改 `UltimateSilentCardExpansion.csproj` 文件中的 `Sts2Dir` 属性：
+```xml
+<Sts2Dir>你的游戏安装路径</Sts2Dir>
+```
+
 ### 编译
 
 ```bash
@@ -48,13 +60,13 @@ dotnet build -c Release
 
 ```bash
 # Windows
-"<Godot路径>\Godot_v4.5.1-stable_mono_win64.exe" --headless --export-release "PCK" "<游戏路径>\mods\UltimateSilentCardExpansion\UltimateSilentCardExpansion.pck"
+"<Godot路径>\Godot_v4.5.1-stable_mono_win64.exe" --headless --export-release "Windows Desktop" "UltimateSilentCardExpansion.pck"
 ```
 
 或者在 Godot 编辑器中：
 1. 打开项目
 2. 选择 **项目** → **导出**
-3. 选择 "PCK" 预设
+3. 选择 "Windows Desktop" 预设
 4. 点击 **导出**
 
 ## 许可证
