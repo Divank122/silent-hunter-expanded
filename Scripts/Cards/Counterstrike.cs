@@ -55,17 +55,11 @@ public class Counterstrike : SilentCardModel, ILocalizationProvider
         ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
 
         int damage = (int)DynamicVars.Damage.BaseValue;
+        int hitCount = cardPlay.Target.Monster?.IntendsToAttack == true ? 2 : 1;
 
-        await DamageCmd.Attack(damage).FromCard(this).Targeting(cardPlay.Target)
+        await DamageCmd.Attack(damage).WithHitCount(hitCount).FromCard(this).Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
-
-        if (cardPlay.Target.Monster?.IntendsToAttack == true)
-        {
-            await DamageCmd.Attack(damage).FromCard(this).Targeting(cardPlay.Target)
-                .WithHitFx("vfx/vfx_attack_slash")
-                .Execute(choiceContext);
-        }
     }
 
     protected override void OnUpgrade()
