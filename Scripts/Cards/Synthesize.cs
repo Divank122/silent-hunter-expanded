@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
-using Godot;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -37,8 +36,6 @@ public class Synthesize : SilentCardModel, ILocalizationProvider
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        GD.PrintRich("[color=cyan][USCE Synthesize] ========== OnPlay started ==========[/color]");
-        
         CardSelectorPrefs prefs = new CardSelectorPrefs(SelectionScreenPrompt, 1) with { PretendCardsCanBePlayed = true };
         
         var result = await CardSelectCmd.FromHand(choiceContext, Owner, prefs, (CardModel c) => 
@@ -48,22 +45,12 @@ public class Synthesize : SilentCardModel, ILocalizationProvider
             return isAttack && isPlayable;
         }, this);
         
-        CardModel card = result.FirstOrDefault();
-        
-        GD.PrintRich($"[color=cyan][USCE Synthesize] Selected card: {card?.Title ?? "null"}[/color]");
+        CardModel? card = result.FirstOrDefault();
 
         if (card != null)
         {
-            GD.PrintRich($"[color=cyan][USCE Synthesize] Setting card to X-cost...[/color]");
-            
             card.EnergyCost.SetCostsX(true);
             CardModelPatch.MarkAsSynthesized(card);
-            
-            GD.PrintRich($"[color=cyan][USCE Synthesize] ========== Done! ==========[/color]");
-        }
-        else
-        {
-            GD.PrintRich($"[color=red][USCE Synthesize] No card selected! ==========[/color]");
         }
     }
 

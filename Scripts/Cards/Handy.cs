@@ -10,7 +10,6 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
-using MegaCrit.Sts2.Core.Logging;
 
 namespace USCE.Scripts.Cards;
 
@@ -39,23 +38,17 @@ public class Handy : SilentCardModel, ILocalizationProvider
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        Log.Info($"[USCE] Handy OnPlay started");
-        
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         
         var drawPile = PileType.Draw.GetPile(Owner).Cards.ToList();
         int cardCount = DynamicVars["Cards"].IntValue;
         
-        Log.Info($"[USCE] Handy: drawPile.Count={drawPile.Count}, cardCount={cardCount}");
-        
         if (drawPile.Count == 0)
         {
-            Log.Info($"[USCE] Handy: early return - drawPile.Count={drawPile.Count}");
             return;
         }
 
         var cardsToSelect = drawPile.OrderBy(c => c.Rarity).ThenBy(c => c.Id).ToList();
-        Log.Info($"[USCE] Handy: cardsToSelect.Count={cardsToSelect.Count}, selecting {cardCount} cards");
         
         var selectedCards = await CardSelectCmd.FromSimpleGrid(
             choiceContext,
@@ -65,24 +58,18 @@ public class Handy : SilentCardModel, ILocalizationProvider
         );
 
         var selectedList = selectedCards.ToList();
-        Log.Info($"[USCE] Handy: selected {selectedList.Count} cards");
         
         if (selectedList.Count > 0)
         {
             await CardPileCmd.Add(selectedList, PileType.Hand);
-            Log.Info($"[USCE] Handy: added {selectedList.Count} cards to hand (overflow goes to discard)");
             
             var cardsInHand = selectedList.Where(c => c.Pile?.Type == PileType.Hand).ToList();
-            Log.Info($"[USCE] Handy: {cardsInHand.Count} cards are in hand, will discard them");
             
             if (cardsInHand.Count > 0)
             {
                 await CardCmd.Discard(choiceContext, cardsInHand);
-                Log.Info($"[USCE] Handy: discarded {cardsInHand.Count} cards from hand");
             }
         }
-        
-        Log.Info($"[USCE] Handy OnPlay finished");
     }
 
     protected override void OnUpgrade()

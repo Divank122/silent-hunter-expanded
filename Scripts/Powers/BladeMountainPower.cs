@@ -5,7 +5,6 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Localization;
-using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using USCE.Scripts.Cards;
@@ -14,37 +13,11 @@ namespace USCE.Scripts.Powers;
 
 public class BladeMountainPower : CustomPowerModel
 {
-    public BladeMountainPower()
-    {
-        Log.Info($"[USCE] BladeMountainPower constructor called, Id={Id}");
-    }
-
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.None;
 
-    private static int _packedIconAccessCount = 0;
-    public override string? CustomPackedIconPath
-    {
-        get
-        {
-            _packedIconAccessCount++;
-            var path = "res://UltimateSilentCardExpansion/images/powers/usce_blade_mountain_power.png";
-            Log.Info($"[USCE] BladeMountainPower.CustomPackedIconPath accessed #{_packedIconAccessCount}, returning: {path}");
-            return path;
-        }
-    }
-
-    private static int _bigIconAccessCount = 0;
-    public override string? CustomBigIconPath
-    {
-        get
-        {
-            _bigIconAccessCount++;
-            var path = "res://UltimateSilentCardExpansion/images/powers/usce_blade_mountain_power.png";
-            Log.Info($"[USCE] BladeMountainPower.CustomBigIconPath accessed #{_bigIconAccessCount}, returning: {path}");
-            return path;
-        }
-    }
+    public override string? CustomPackedIconPath => "res://UltimateSilentCardExpansion/images/powers/usce_blade_mountain_power.png";
+    public override string? CustomBigIconPath => "res://UltimateSilentCardExpansion/images/powers/usce_blade_mountain_power.png";
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {

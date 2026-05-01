@@ -7,7 +7,6 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization;
-using MegaCrit.Sts2.Core.Logging;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -16,11 +15,6 @@ namespace USCE.Scripts.Powers;
 
 public class BanePower : CustomPowerModel
 {
-    public BanePower()
-    {
-        Log.Info($"[USCE] BanePower constructor called!");
-    }
-
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
@@ -35,20 +29,14 @@ public class BanePower : CustomPowerModel
 
     public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target, DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
     {
-        Log.Info($"[USCE] AfterDamageReceived called: target={target?.Name}, Owner={Owner?.Name}, target==Owner={target == Owner}");
-        Log.Info($"[USCE] props flags: {props}, IsPoweredAttack={props.IsPoweredAttack_()}, TotalDamage={result.TotalDamage}");
-        
         if (target == Owner && props.IsPoweredAttack_())
         {
-            Log.Info($"[USCE] Condition passed! Checking poison...");
             var poisonPower = Owner!.GetPower<PoisonPower>();
-            Log.Info($"[USCE] poisonPower={poisonPower}, Amount={poisonPower?.Amount}, this.Amount={Amount}");
             
             if (poisonPower != null && poisonPower.Amount > 0)
             {
                 int poisonAmount = poisonPower.Amount;
                 int newAmount = poisonAmount - Amount;
-                Log.Info($"[USCE] Reducing poison from {poisonAmount} to {newAmount}");
                 if (newAmount <= 0)
                 {
                     await PowerCmd.Remove(poisonPower);
@@ -59,18 +47,12 @@ public class BanePower : CustomPowerModel
                 }
             }
         }
-        else
-        {
-            Log.Info($"[USCE] Condition NOT passed");
-        }
     }
 
     public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
     {
-        Log.Info($"[USCE] AfterTurnEnd called: side={side}, Owner.Side={Owner?.Side}");
         if (Owner != null && side != Owner.Side)
         {
-            Log.Info($"[USCE] Removing BanePower");
             await PowerCmd.Remove(this);
         }
     }

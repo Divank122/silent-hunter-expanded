@@ -61,7 +61,9 @@ public static class CardEnergyCostPatch
 
     public static void SetCostsX(this CardEnergyCost cost, bool value)
     {
-        var card = (CardModel)CardField.GetValue(cost);
+        var card = (CardModel?)CardField.GetValue(cost);
+        if (card == null) return;
+        
         card.AssertMutable();
         
         CostsXField.SetValue(cost, value);
