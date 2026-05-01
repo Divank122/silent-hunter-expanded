@@ -41,13 +41,14 @@ public class BanePower : CustomPowerModel
         if (target == Owner && props.IsPoweredAttack_())
         {
             Log.Info($"[USCE] Condition passed! Checking poison...");
-            var poisonPower = Owner.GetPower<PoisonPower>();
+            var poisonPower = Owner!.GetPower<PoisonPower>();
             Log.Info($"[USCE] poisonPower={poisonPower}, Amount={poisonPower?.Amount}, this.Amount={Amount}");
             
             if (poisonPower != null && poisonPower.Amount > 0)
             {
-                int newAmount = poisonPower.Amount - Amount;
-                Log.Info($"[USCE] Reducing poison from {poisonPower.Amount} to {newAmount}");
+                int poisonAmount = poisonPower.Amount;
+                int newAmount = poisonAmount - Amount;
+                Log.Info($"[USCE] Reducing poison from {poisonAmount} to {newAmount}");
                 if (newAmount <= 0)
                 {
                     await PowerCmd.Remove(poisonPower);
@@ -67,7 +68,7 @@ public class BanePower : CustomPowerModel
     public override async Task AfterTurnEnd(PlayerChoiceContext choiceContext, CombatSide side)
     {
         Log.Info($"[USCE] AfterTurnEnd called: side={side}, Owner.Side={Owner?.Side}");
-        if (side != Owner.Side)
+        if (Owner != null && side != Owner.Side)
         {
             Log.Info($"[USCE] Removing BanePower");
             await PowerCmd.Remove(this);

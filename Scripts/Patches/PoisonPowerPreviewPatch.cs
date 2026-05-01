@@ -47,7 +47,12 @@ public static class PoisonPowerPreviewPatch
 
     private static int GetTriggerCount(PoisonPower power, Creature owner)
     {
-        IEnumerable<Creature> source = from c in owner.CombatState.GetOpponentsOf(owner)
+        var combatState = owner.CombatState;
+        if (combatState == null)
+        {
+            return System.Math.Min(power.Amount, 1);
+        }
+        IEnumerable<Creature> source = from c in combatState.GetOpponentsOf(owner)
             where c.IsAlive
             select c;
         return System.Math.Min(power.Amount, 1 + source.Sum(a => a.GetPowerAmount<AccelerantPower>()));

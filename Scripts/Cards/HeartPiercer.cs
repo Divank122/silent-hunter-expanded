@@ -53,7 +53,7 @@ public class HeartPiercer : SilentCardModel, ILocalizationProvider
         int shivCount = DynamicVars["ShivCount"].IntValue;
         for (int i = 0; i < shivCount; i++)
         {
-            await Shiv.CreateInHand(Owner, CombatState);
+            await Shiv.CreateInHand(Owner, CombatState!);
             await Cmd.Wait(0.1f);
         }
     }
