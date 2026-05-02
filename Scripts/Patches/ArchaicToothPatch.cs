@@ -1,11 +1,12 @@
+using System.Collections.Generic;
 using System.Linq;
-using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Relics;
+using MegaCrit.Sts2.Core.Random;
 using USCE.Scripts.Cards;
 
 namespace USCE.Scripts.Patches;
@@ -20,26 +21,28 @@ public static class ArchaicToothPatch
         var neutralizeId = ModelDb.Card<Neutralize>().Id;
         var survivorId = ModelDb.Card<Survivor>().Id;
 
-        bool hasNeutralize = player.Deck.Cards.Any(c => c.Id == neutralizeId);
-        bool hasSurvivor = player.Deck.Cards.Any(c => c.Id == survivorId);
+        List<CardModel> candidates = new List<CardModel>();
+        
+        var neutralize = player.Deck.Cards.FirstOrDefault(c => c.Id == neutralizeId);
+        if (neutralize != null)
+        {
+            candidates.Add(neutralize);
+        }
+        
+        var survivor = player.Deck.Cards.FirstOrDefault(c => c.Id == survivorId);
+        if (survivor != null)
+        {
+            candidates.Add(survivor);
+        }
 
-        if (hasNeutralize && hasSurvivor)
+        if (candidates.Count == 1)
         {
-            __result = GD.Randf() < 0.5f
-                ? player.Deck.Cards.First(c => c.Id == neutralizeId)
-                : player.Deck.Cards.First(c => c.Id == survivorId);
+            __result = candidates[0];
         }
-        else if (hasNeutralize)
+        else if (candidates.Count > 1)
         {
-            __result = player.Deck.Cards.First(c => c.Id == neutralizeId);
-        }
-        else if (hasSurvivor)
-        {
-            __result = player.Deck.Cards.First(c => c.Id == survivorId);
-        }
-        else
-        {
-            __result = null;
+            var rng = new Rng((uint)player.RunState.Rng.Seed);
+            __result = rng.NextItem(candidates);
         }
 
         return false;
@@ -47,7 +50,7 @@ public static class ArchaicToothPatch
 
     [HarmonyPatch("GetTranscendenceTransformedCard")]
     [HarmonyPrefix]
-    public static bool GetTranscendenceTransformedCardPrefix(ArchaicTooth __instance, ref CardModel __result, CardModel starterCard)
+    public static bool GetTranscendenceTransformedCardPrefix(ref CardModel __result, CardModel starterCard)
     {
         var survivorId = ModelDb.Card<Survivor>().Id;
 
@@ -67,7 +70,6 @@ public static class ArchaicToothPatch
             __result = cardModel;
             return false;
         }
-
         return true;
     }
 }

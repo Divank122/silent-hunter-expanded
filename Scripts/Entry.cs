@@ -1,4 +1,5 @@
 using BaseLib.Patches.Localization;
+using Godot;
 using Godot.Bridge;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Logging;
@@ -13,6 +14,8 @@ public class Entry
     {
         var harmony = new Harmony("sts2.usce");
         harmony.PatchAll();
+        GD.Print("[USCE] Harmony patches applied");
+
         ScriptManagerBridge.LookupScriptsInAssembly(typeof(Entry).Assembly);
         SimpleLoc.EnableSimpleLoc("UltimateSilentCardExpansion");
 
