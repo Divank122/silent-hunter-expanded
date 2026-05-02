@@ -56,11 +56,12 @@ public class ConfusingImpact : SilentCardModel
         var monster = cardPlay.Target.Monster;
         if (monster != null && !cardPlay.Target.IsDead)
         {
-            var stateLog = monster.MoveStateMachine.StateLog;
+            var stateLog = monster.MoveStateMachine!.StateLog;
             string nextMoveId = string.Empty;
             if (stateLog.Count > 0)
             {
-                nextMoveId = stateLog[^1]!.Id ?? string.Empty;
+                var lastState = stateLog[^1]!;
+                nextMoveId = lastState.Id ?? string.Empty;
             }
 
             async Task ConfusingImpactMove(IReadOnlyList<Creature> targets)
