@@ -1,0 +1,55 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using BaseLib.Abstracts;
+using BaseLib.Utils;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models.CardPools;
+using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.ValueProps;
+
+namespace USCE.Scripts.Cards;
+
+[Pool(typeof(SilentCardPool))]
+public class Solidify : SilentCardModel, ILocalizationProvider
+{
+    private const int energyCost = 1;
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => new IHoverTip[]
+    {
+        HoverTipFactory.FromPower<DexterityPower>()
+    };
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
+    {
+        new BlockVar(25m, ValueProp.Move),
+        new PowerVar<DexterityPower>("DexterityLoss", -1m)
+    };
+
+    public Solidify()
+        : base(energyCost, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    {
+    }
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
+        await PowerCmd.Apply<DexterityPower>(Owner.Creature, DynamicVars["DexterityLoss"].IntValue, Owner.Creature, this);
+    }
+
+    protected override void OnUpgrade()
+    {
+        DynamicVars.Block.UpgradeValueBy(5m);
+    }
+
+    public override List<(string, string)>? Localization => LocManager.Instance.Language switch
+    {
+        "zhs" => new CardLoc("凝固", "获得{Block:diff()}点格挡。失去1点敏捷。"),
+        _ => new CardLoc("Solidify", "Gain {Block:diff()} Block. Lose 1 Dexterity.")
+    };
+}
