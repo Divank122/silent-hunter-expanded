@@ -10,4 +10,7 @@ public class USCEKeywords
 
     [CustomEnum("Sluggish")] [KeywordProperties(AutoKeywordPosition.Before)]
     public static CardKeyword Sluggish;
+
+    [CustomEnum("GreatBlade")] [KeywordProperties(AutoKeywordPosition.Before)]
+    public static CardKeyword GreatBlade;
 }

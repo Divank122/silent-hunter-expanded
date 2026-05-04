@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Models;
@@ -17,13 +19,68 @@ namespace USCE.Scripts.Patches;
 [HarmonyPatch(typeof(Shiv))]
 public static class ShivCreateInHandPatches
 {
-    private static CardModel? _currentPlayingCard = null;
-    private static readonly HashSet<Player> _playersWhoGotGreatBladeThisCard = new();
+    private static readonly HashSet<Player> _playersWhoGotGreatBladeFromCardPlay = new();
 
-    public static void SetCurrentCard(CardModel? card)
+    public static void StartCardPlay()
     {
-        _currentPlayingCard = card;
-        _playersWhoGotGreatBladeThisCard.Clear();
+        _playersWhoGotGreatBladeFromCardPlay.Clear();
+    }
+
+    public static void EndCardPlay()
+    {
+        _playersWhoGotGreatBladeFromCardPlay.Clear();
+    }
+
+    private enum SourceType
+    {
+        None,
+        Card,
+        Power
+    }
+
+    private static SourceType FindNearestSource()
+    {
+        var stackTrace = new StackTrace();
+        for (int i = 0; i < stackTrace.FrameCount; i++)
+        {
+            var method = stackTrace.GetFrame(i)?.GetMethod();
+            if (method != null)
+            {
+                var declaringType = method.DeclaringType;
+                if (declaringType != null)
+                {
+                    if (typeof(CardModel).IsAssignableFrom(declaringType))
+                    {
+                        return SourceType.Card;
+                    }
+                    if (typeof(PowerModel).IsAssignableFrom(declaringType))
+                    {
+                        return SourceType.Power;
+                    }
+                }
+            }
+        }
+        return SourceType.None;
+    }
+
+    private static (int normalAmount, int plusAmount) GetBladeMountainPowers(Creature creature)
+    {
+        int normalAmount = 0;
+        int plusAmount = 0;
+
+        var power = creature.GetPower<BladeMountainPower>();
+        if (power != null)
+        {
+            normalAmount = power.Amount;
+        }
+
+        var powerPlus = creature.GetPower<BladeMountainPowerPlus>();
+        if (powerPlus != null)
+        {
+            plusAmount = powerPlus.Amount;
+        }
+
+        return (normalAmount, plusAmount);
     }
 
     [HarmonyPatch(nameof(Shiv.CreateInHand), typeof(Player), typeof(CombatState))]
@@ -35,20 +92,27 @@ public static class ShivCreateInHandPatches
             return true;
         }
 
-        var bladeMountainPower = owner.Creature.GetPower<BladeMountainPower>();
-        if (bladeMountainPower == null)
+        var (normalAmount, plusAmount) = GetBladeMountainPowers(owner.Creature);
+        if (normalAmount == 0 && plusAmount == 0)
         {
             return true;
         }
 
-        if (_playersWhoGotGreatBladeThisCard.Contains(owner))
+        var sourceType = FindNearestSource();
+        if (sourceType == SourceType.Power)
+        {
+            __result = CreateGreatBlades(owner, normalAmount, plusAmount);
+            return false;
+        }
+
+        if (_playersWhoGotGreatBladeFromCardPlay.Contains(owner))
         {
             __result = Task.FromResult<CardModel?>(null);
             return false;
         }
+        _playersWhoGotGreatBladeFromCardPlay.Add(owner);
 
-        _playersWhoGotGreatBladeThisCard.Add(owner);
-        __result = CreateOneGreatBlade(owner, bladeMountainPower);
+        __result = CreateGreatBlades(owner, normalAmount, plusAmount);
         return false;
     }
 
@@ -61,44 +125,73 @@ public static class ShivCreateInHandPatches
             return true;
         }
 
-        var bladeMountainPower = owner.Creature.GetPower<BladeMountainPower>();
-        if (bladeMountainPower == null)
+        var (normalAmount, plusAmount) = GetBladeMountainPowers(owner.Creature);
+        if (normalAmount == 0 && plusAmount == 0)
         {
             return true;
         }
 
-        if (_playersWhoGotGreatBladeThisCard.Contains(owner))
-        {
-            __result = Task.FromResult<IEnumerable<CardModel>>(System.Array.Empty<CardModel>());
-            return false;
-        }
-
-        _playersWhoGotGreatBladeThisCard.Add(owner);
-        
-        if (_currentPlayingCard != null)
-        {
-            __result = CreateGreatBladesInstead(owner, bladeMountainPower, 1);
-        }
-        else
-        {
-            __result = CreateGreatBladesInstead(owner, bladeMountainPower, count);
-        }
+        __result = CreateGreatBladesMultiple(owner, normalAmount, plusAmount);
         return false;
     }
 
-    private static async Task<CardModel?> CreateOneGreatBlade(Player owner, BladeMountainPower bladeMountainPower)
+    private static async Task<CardModel?> CreateGreatBlades(Player owner, int normalAmount, int plusAmount)
     {
-        var blades = await bladeMountainPower.CreateGreatBladesInstead(owner, 1);
-        foreach (var blade in blades)
+        var combatState = owner.Creature.CombatState!;
+        CardModel? firstBlade = null;
+
+        if (normalAmount > 0)
         {
-            return blade;
+            var blades = await GreatBlade.CreateInHand(owner, normalAmount, combatState);
+            foreach (var blade in blades)
+            {
+                if (firstBlade == null)
+                {
+                    firstBlade = blade;
+                }
+            }
         }
-        return null;
+
+        if (plusAmount > 0)
+        {
+            var blades = await GreatBlade.CreateInHand(owner, plusAmount, combatState);
+            foreach (var blade in blades)
+            {
+                blade.UpgradeInternal();
+                blade.FinalizeUpgradeInternal();
+                if (firstBlade == null)
+                {
+                    firstBlade = blade;
+                }
+            }
+        }
+
+        return firstBlade;
     }
 
-    private static async Task<IEnumerable<CardModel>> CreateGreatBladesInstead(Player owner, BladeMountainPower bladeMountainPower, int count)
+    private static async Task<IEnumerable<CardModel>> CreateGreatBladesMultiple(Player owner, int normalAmount, int plusAmount)
     {
-        return await bladeMountainPower.CreateGreatBladesInstead(owner, count);
+        var combatState = owner.Creature.CombatState!;
+        var result = new List<CardModel>();
+
+        if (normalAmount > 0)
+        {
+            var blades = await GreatBlade.CreateInHand(owner, normalAmount, combatState);
+            result.AddRange(blades);
+        }
+
+        if (plusAmount > 0)
+        {
+            var blades = await GreatBlade.CreateInHand(owner, plusAmount, combatState);
+            foreach (var blade in blades)
+            {
+                blade.UpgradeInternal();
+                blade.FinalizeUpgradeInternal();
+            }
+            result.AddRange(blades);
+        }
+
+        return result;
     }
 }
 
@@ -109,13 +202,13 @@ public static class HookCardPlayPatch
     [HarmonyPrefix]
     public static void BeforeCardPlayed(CombatState combatState, CardPlay cardPlay)
     {
-        ShivCreateInHandPatches.SetCurrentCard(cardPlay?.Card);
+        ShivCreateInHandPatches.StartCardPlay();
     }
 
     [HarmonyPatch(nameof(Hook.AfterCardPlayed))]
     [HarmonyPostfix]
     public static void AfterCardPlayed()
     {
-        ShivCreateInHandPatches.SetCurrentCard(null);
+        ShivCreateInHandPatches.EndCardPlay();
     }
 }

@@ -11,6 +11,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
@@ -40,10 +41,16 @@ public sealed class GreatBlade : SilentCardModel
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
         new HashSet<CardKeyword> { CardKeyword.Exhaust, CardKeyword.Retain };
 
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromKeyword(USCEKeywords.GreatBlade),
+        HoverTipFactory.FromCard<Shiv>()
+    ];
+
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("巨刀", "造成{Damage:diff()}点伤害。\n这张牌被视为小刀。"),
-        _ => new CardLoc("Great Blade", "Deal {Damage:diff()} damage.\nThis card is considered a Shiv.")
+        "zhs" => new CardLoc("巨刀", "造成{Damage:diff()}点伤害。"),
+        _ => new CardLoc("Great Blade", "Deal {Damage:diff()} damage.")
     };
 
     public GreatBlade() : base(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)

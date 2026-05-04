@@ -2,5 +2,7 @@
   "USCE-THIRSTY.title": "Thirsty",
   "USCE-THIRSTY.description": "After playing this card, you must kill a non-Minion enemy before you can play it again.",
   "USCE-SLUGGISH.title": "Sluggish",
-  "USCE-SLUGGISH.description": "Until the end of your turn, this card cannot be discarded."
+  "USCE-SLUGGISH.description": "Until the end of your turn, this card cannot be discarded.",
+  "USCE-GREATBLADE.title": "Great Blade",
+  "USCE-GREATBLADE.description": "This card is also considered a [gold]Shiv[/gold]."
 }

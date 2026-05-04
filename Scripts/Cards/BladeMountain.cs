@@ -30,6 +30,7 @@ public class BladeMountain : SilentCardModel, ILocalizationProvider
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
+        HoverTipFactory.FromKeyword(USCEKeywords.GreatBlade),
         HoverTipFactory.FromCard<Shiv>(),
         HoverTipFactory.FromCard<GreatBlade>(IsUpgraded)
     ];
@@ -47,10 +48,13 @@ public class BladeMountain : SilentCardModel, ILocalizationProvider
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
-        var power = await PowerCmd.Apply<BladeMountainPower>(Owner.Creature, 1, Owner.Creature, this);
-        if (IsUpgraded && power != null)
+        if (IsUpgraded)
         {
-            power.IsUpgraded = true;
+            await PowerCmd.Apply<BladeMountainPowerPlus>(Owner.Creature, 1m, Owner.Creature, this);
+        }
+        else
+        {
+            await PowerCmd.Apply<BladeMountainPower>(Owner.Creature, 1m, Owner.Creature, this);
         }
     }
 
