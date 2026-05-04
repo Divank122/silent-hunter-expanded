@@ -1,24 +1,37 @@
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection;
 using System.Threading.Tasks;
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
-using MegaCrit.Sts2.Core.Combat;
-using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Hooks;
-using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Nodes.CommonUi;
+using MegaCrit.Sts2.Core.Rooms;
 using USCE.Scripts.Cards;
 using USCE.Scripts.Powers;
 
-using MegaCrit.Sts2.Core.Nodes.CommonUi;
-
 namespace USCE.Scripts.Patches;
 
+/// <summary>
+/// 处理"刀山"能力的Patch：将所有创建小刀的效果替换为创建巨刀
+/// 
+/// 核心逻辑：
+/// 1. 拦截Shiv.CreateInHand的调用
+/// 2. 检查玩家是否有刀山能力
+/// 3. 如果有，创建巨刀代替小刀
+/// 4. 处理升级版本的刀山能力（创建巨刀+）
+/// 
+/// 特殊处理：
+/// - Power来源：每次都创建巨刀
+/// - Card来源：每次打出只创建一次（防止多次触发）
+/// - ReadyAndWaitingPower+：创建的巨刀自动升级
+/// </summary>
 [HarmonyPatch(typeof(Shiv))]
 public static class ShivCreateInHandPatches
 {
@@ -35,6 +48,12 @@ public static class ShivCreateInHandPatches
     public static void EndCardPlay()
     {
         _playersWhoGotGreatBladeFromCardPlay.Clear();
+    }
+
+    public static void ClearAll()
+    {
+        _playersWhoGotGreatBladeFromCardPlay.Clear();
+        _shouldSkipUpgrade = false;
     }
 
     private enum SourceType
@@ -287,5 +306,29 @@ public static class HookCardPlayPatch
     public static void AfterCardPlayed()
     {
         ShivCreateInHandPatches.EndCardPlay();
+    }
+}
+
+[HarmonyPatch(typeof(CombatManager), "SetUpCombat")]
+public static class ShivCombatPatch
+{
+    public static void Postfix(CombatState state)
+    {
+        var instance = CombatManager.Instance;
+        if (instance != null)
+        {
+            instance.CombatEnded += OnCombatEnded;
+        }
+    }
+
+    private static void OnCombatEnded(CombatRoom room)
+    {
+        ShivCreateInHandPatches.ClearAll();
+
+        var instance = CombatManager.Instance;
+        if (instance != null)
+        {
+            instance.CombatEnded -= OnCombatEnded;
+        }
     }
 }
