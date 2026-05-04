@@ -29,8 +29,8 @@ public class BladeMountainPower : CustomPowerModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new PowerLoc("刀山", "所有获得小刀的效果改为获得1张巨刀。", "所有获得[gold]小刀[/gold]的效果改为获得{Amount}张[gold]巨刀[/gold]。"),
-        _ => new PowerLoc("Blade Mountain", "All effects that create Shivs create 1 Great Blade instead.", "All effects that create [gold]Shivs[/gold] create {Amount} [gold]Great Blades[/gold] instead.")
+        "zhs" => new PowerLoc("刀山", "所有获得小刀的效果改为获得1张巨刀。", "所有获得[gold]小刀[/gold]的效果改为获得[blue]{Amount}[/blue]张[gold]巨刀[/gold]。"),
+        _ => new PowerLoc("Blade Mountain", "All effects that create Shivs create 1 Great Blade instead.", "All effects that create [gold]Shivs[/gold] create [blue]{Amount}[/blue] [gold]Great Blades[/gold] instead.")
     };
 
     public async Task<IEnumerable<CardModel>> CreateGreatBladesInstead(Player owner, int count)
@@ -61,8 +61,8 @@ public class BladeMountainPowerPlus : CustomPowerModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new PowerLoc("刀山+", "所有获得小刀的效果改为获得1张巨刀+。", "所有获得[gold]小刀[/gold]的效果改为获得{Amount}张[gold]巨刀+[/gold]。"),
-        _ => new PowerLoc("Blade Mountain+", "All effects that create Shivs create 1 Great Blade+ instead.", "All effects that create [gold]Shivs[/gold] create {Amount} [gold]Great Blades+[/gold] instead.")
+        "zhs" => new PowerLoc("刀山+", "所有获得小刀的效果改为获得1张巨刀+。", "所有获得[gold]小刀[/gold]的效果改为获得[blue]{Amount}[/blue]张[gold]巨刀+[/gold]。"),
+        _ => new PowerLoc("Blade Mountain+", "All effects that create Shivs create 1 Great Blade+ instead.", "All effects that create [gold]Shivs[/gold] create [blue]{Amount}[/blue] [gold]Great Blades+[/gold] instead.")
     };
 
     public async Task<IEnumerable<CardModel>> CreateGreatBladesInstead(Player owner, int count)

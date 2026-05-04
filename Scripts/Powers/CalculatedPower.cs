@@ -22,7 +22,7 @@ public class CalculatedPower : CustomPowerModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new PowerLoc("精打细算", "在你的回合结束时，每有一张手牌，就对所有敌人造成2点伤害。", "在你的回合结束时，每有一张手牌，就对所有敌人造成[blue]{Amount}[/blue]点伤害。"),
+        "zhs" => new PowerLoc("精打细算", "在你的回合结束时，每有一张[gold]手牌[/gold]，就对所有敌人造成2点伤害。", "在你的回合结束时，每有一张[gold]手牌[/gold]，就对所有敌人造成[blue]{Amount}[/blue]点伤害。"),
         _ => new PowerLoc("Calculated", "At the end of your turn, deal 2 damage to ALL enemies for each card in your hand.", "At the end of your turn, deal [blue]{Amount}[/blue] damage to ALL enemies for each card in your hand.")
     };
 
