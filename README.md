@@ -1,6 +1,6 @@
 # 史上最好的猎手卡牌扩展
 
-GitHub: https://github.com/Divank122/silent-hunter-expanded
+GitHub: https://github.com/Divank122/UltimateSilentCardExpansion-STS2
 
 为《杀戮尖塔2》静默猎手添加29张新卡牌的模组。
 
