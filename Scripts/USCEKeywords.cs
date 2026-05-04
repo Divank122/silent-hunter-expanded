@@ -13,4 +13,7 @@ public class USCEKeywords
 
     [CustomEnum("GreatBlade")] [KeywordProperties(AutoKeywordPosition.Before)]
     public static CardKeyword GreatBlade;
+
+    [CustomEnum("Extinct")] [KeywordProperties(AutoKeywordPosition.Before)]
+    public static CardKeyword Extinct;
 }

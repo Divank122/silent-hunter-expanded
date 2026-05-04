@@ -4,5 +4,7 @@
   "USCE-SLUGGISH.title": "迟钝",
   "USCE-SLUGGISH.description": "在你的回合结束前，这张牌无法被丢弃。",
   "USCE-GREATBLADE.title": "巨刀",
-  "USCE-GREATBLADE.description": "这张牌也被视为[gold]小刀[/gold]。"
+  "USCE-GREATBLADE.description": "这张牌也被视为[gold]小刀[/gold]。",
+  "USCE-EXTINCT.title": "灭绝",
+  "USCE-EXTINCT.description": "打出这张牌后，将其从你的[gold]牌组[/gold]中移除。这张牌无法被复制。"
 }
