@@ -29,13 +29,14 @@ public class Clot : SilentCardModel, ILocalizationProvider
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
-        HoverTipFactory.FromPower<PoisonPower>()
+        HoverTipFactory.FromPower<PoisonPower>(),
+        HoverTipFactory.Static(StaticHoverTip.Block)
     ];
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("结块", "每当你给予1次[gold]中毒[/gold]，就获得{ClotPower:diff()}点格挡。"),
-        _ => new CardLoc("Clot", "Whenever you apply [gold]Poison[/gold], gain {ClotPower:diff()} Block.")
+        "zhs" => new CardLoc("结块", "每当你给予1次[gold]中毒[/gold]，就获得{ClotPower:diff()}点[gold]格挡[/gold]。"),
+        _ => new CardLoc("Clot", "Whenever you apply [gold]Poison[/gold], gain {ClotPower:diff()} [gold]Block[/gold].")
     };
 
     public Clot() : base(energyCost, type, rarity, targetType)

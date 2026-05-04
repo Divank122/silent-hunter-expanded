@@ -41,8 +41,8 @@ public class Prospector : SilentCardModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("探索者", "获得{Block:diff()}点格挡。\n丢弃任意张牌，每丢弃一张牌，就随机给予敌人{PoisonPower:diff()}层[gold]中毒[/gold]一次。"),
-        _ => new CardLoc("Prospector", "Gain {Block:diff()} Block.\nDiscard any number of cards. For each card discarded, apply {PoisonPower:diff()} [gold]Poison[/gold] to a random enemy.")
+        "zhs" => new CardLoc("探索者", "获得{Block:diff()}点[gold]格挡[/gold]。\n丢弃任意张牌，每丢弃一张牌，就随机给予敌人{PoisonPower:diff()}层[gold]中毒[/gold]一次。"),
+        _ => new CardLoc("Prospector", "Gain {Block:diff()} [gold]Block[/gold].\nDiscard any number of cards. For each card discarded, apply {PoisonPower:diff()} [gold]Poison[/gold] to a random enemy.")
     };
 
     public Prospector() : base(energyCost, type, rarity, targetType)

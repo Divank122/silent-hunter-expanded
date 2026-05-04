@@ -49,7 +49,7 @@ public class AirflowBarrier : SilentCardModel, ILocalizationProvider
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("气流屏障", "每回合第一次弃牌时，获得{BlockAmount:diff()}点格挡。"),
-        _ => new CardLoc("Airflow Barrier", "Gain {BlockAmount:diff()} Block the first time you discard each turn.")
+        "zhs" => new CardLoc("气流屏障", "每回合第一次弃牌时，获得{BlockAmount:diff()}点[gold]格挡[/gold]。"),
+        _ => new CardLoc("Airflow Barrier", "Gain {BlockAmount:diff()} [gold]Block[/gold] the first time you discard each turn.")
     };
 }

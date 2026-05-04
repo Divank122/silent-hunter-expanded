@@ -52,8 +52,8 @@ public class Squirm : SilentCardModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("蠕动", "获得{Block:diff()}点格挡。\n如果敌方拥有[gold]中毒[/gold]，使其失去{PoisonLoss:diff()}层[gold]中毒[/gold]，额外获得{BonusBlock:diff()}点格挡。"),
-        _ => new CardLoc("Squirm", "Gain {Block:diff()} Block.\nIf the enemy has [gold]Poison[/gold], they lose {PoisonLoss:diff()} [gold]Poison[/gold] and you gain {BonusBlock:diff()} Block.")
+        "zhs" => new CardLoc("蠕动", "获得{Block:diff()}点[gold]格挡[/gold]。\n如果敌方拥有[gold]中毒[/gold]，使其失去{PoisonLoss:diff()}层[gold]中毒[/gold]，额外获得{BonusBlock:diff()}点[gold]格挡[/gold]。"),
+        _ => new CardLoc("Squirm", "Gain {Block:diff()} [gold]Block[/gold].\nIf the enemy has [gold]Poison[/gold], they lose {PoisonLoss:diff()} [gold]Poison[/gold] and you gain {BonusBlock:diff()} [gold]Block[/gold].")
     };
 
     public Squirm() : base(energyCost, type, rarity, targetType)

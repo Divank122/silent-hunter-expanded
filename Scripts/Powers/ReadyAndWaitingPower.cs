@@ -29,8 +29,8 @@ public class ReadyAndWaitingPower : CustomPowerModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new PowerLoc("有备而来", "每当你触发奇巧时，添加1张小刀到你的手牌。", "每当你触发[gold]奇巧[/gold]时，添加1张[gold]小刀[/gold]到你的[gold]手牌[/gold]。"),
-        _ => new PowerLoc("Ready And Waiting", "Whenever you trigger Sly, add 1 Shiv to your Hand.", "Whenever you trigger [gold]Sly[/gold], add 1 [gold]Shiv[/gold] to your [gold]Hand[/gold].")
+        "zhs" => new PowerLoc("有备而来", "每当你触发奇巧时，添加1张小刀到你的手牌。", "每当你触发[gold]奇巧[/gold]时，添加{Amount}张[gold]小刀[/gold]到你的[gold]手牌[/gold]。"),
+        _ => new PowerLoc("Ready And Waiting", "Whenever you trigger Sly, add 1 Shiv to your Hand.", "Whenever you trigger [gold]Sly[/gold], add {Amount} [gold]Shivs[/gold] to your [gold]Hand[/gold].")
     };
 
     public override async Task BeforeCardAutoPlayed(CardModel card, Creature? target, AutoPlayType type)
@@ -61,8 +61,8 @@ public class ReadyAndWaitingPowerPlus : CustomPowerModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new PowerLoc("有备而来+", "每当你触发奇巧时，添加1张小刀+到你的手牌。", "每当你触发[gold]奇巧[/gold]时，添加1张[gold]小刀+[/gold]到你的[gold]手牌[/gold]。"),
-        _ => new PowerLoc("Ready And Waiting+", "Whenever you trigger Sly, add 1 Shiv+ to your Hand.", "Whenever you trigger [gold]Sly[/gold], add 1 [gold]Shiv+[/gold] to your [gold]Hand[/gold].")
+        "zhs" => new PowerLoc("有备而来+", "每当你触发奇巧时，添加1张小刀+到你的手牌。", "每当你触发[gold]奇巧[/gold]时，添加{Amount}张[gold]小刀+[/gold]到你的[gold]手牌[/gold]。"),
+        _ => new PowerLoc("Ready And Waiting+", "Whenever you trigger Sly, add 1 Shiv+ to your Hand.", "Whenever you trigger [gold]Sly[/gold], add {Amount} [gold]Shivs+[/gold] to your [gold]Hand[/gold].")
     };
 
     public override async Task BeforeCardAutoPlayed(CardModel card, Creature? target, AutoPlayType type)
