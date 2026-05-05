@@ -37,22 +37,6 @@ public static class ExtinctClonePatch
     }
 }
 
-[HarmonyPatch(typeof(RunState))]
-public static class ExtinctRunStateClonePatch
-{
-    [HarmonyPatch(nameof(RunState.CloneCard), [typeof(CardModel)])]
-    [HarmonyPrefix]
-    public static bool CloneCardPrefix(CardModel mutableCard, ref CardModel? __result)
-    {
-        if (mutableCard.Keywords.Contains(USCEKeywords.Extinct))
-        {
-            __result = null;
-            return false;
-        }
-        return true;
-    }
-}
-
 [HarmonyPatch(typeof(EnchantmentModel))]
 public static class ExtinctCloneEnchantPatch
 {

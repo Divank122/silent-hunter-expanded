@@ -33,9 +33,8 @@ public class Storm : SilentCardModel, ILocalizationProvider
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust, USCEKeywords.Extinct];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
-        HoverTipFactory.FromRelic<OddlySmoothStone>()
-            .Append(HoverTipFactory.Static(StaticHoverTip.Fatal));
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => HoverTipFactory.FromRelic<OddlySmoothStone>()
+        .Concat(new IHoverTip[] { HoverTipFactory.Static(StaticHoverTip.Fatal) });
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
