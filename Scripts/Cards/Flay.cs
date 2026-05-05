@@ -22,12 +22,12 @@ public class Flay : SilentCardModel, ILocalizationProvider
     private const CardType type = CardType.Power;
     private const CardRarity rarity = CardRarity.Uncommon;
 
-    public override TargetType TargetType => IsUpgraded ? TargetType.AnyEnemy : TargetType.Self;
+    public override TargetType TargetType => TargetType.Self;
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new PowerVar<FlayPower>(1m),
-        new DynamicVar("PoisonAmount", 3m)
+        new DynamicVar("PoisonAmount", 4m)
     ];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
@@ -38,8 +38,8 @@ public class Flay : SilentCardModel, ILocalizationProvider
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("剥皮", "每当你给予敌人[gold]中毒[/gold]，额外给予{FlayPower:diff()}层[gold]虚弱[/gold]。{IfUpgraded:show:\n给予{PoisonAmount:diff()}层[gold]中毒[/gold]。}"),
-        _ => new CardLoc("Flay", "Whenever you apply [gold]Poison[/gold] to an enemy, apply {FlayPower:diff()} [gold]Weak[/gold].{IfUpgraded:show:\nApply {PoisonAmount:diff()} [gold]Poison[/gold].}")
+        "zhs" => new CardLoc("剥皮", "每当你给予敌人[gold]中毒[/gold]，额外给予{FlayPower:diff()}层[gold]虚弱[/gold]。{IfUpgraded:show:\n给予随机敌人{PoisonAmount:diff()}层[gold]中毒[/gold]。}"),
+        _ => new CardLoc("Flay", "Whenever you apply [gold]Poison[/gold] to an enemy, apply {FlayPower:diff()} [gold]Weak[/gold].{IfUpgraded:show:\nApply {PoisonAmount:diff()} [gold]Poison[/gold] to a random enemy.}")
     };
 
     public Flay() : base(energyCost, type, rarity, TargetType.Self)
@@ -51,9 +51,15 @@ public class Flay : SilentCardModel, ILocalizationProvider
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         await PowerCmd.Apply<FlayPower>(Owner.Creature, DynamicVars["FlayPower"].IntValue, Owner.Creature, this);
 
-        if (IsUpgraded && cardPlay.Target != null)
+        if (IsUpgraded)
         {
-            await PowerCmd.Apply<PoisonPower>(cardPlay.Target, DynamicVars["PoisonAmount"].IntValue, Owner.Creature, this);
+            var enemies = CombatState?.HittableEnemies.ToList();
+            if (enemies != null && enemies.Count > 0)
+            {
+                var random = new System.Random();
+                var randomEnemy = enemies[random.Next(enemies.Count)];
+                await PowerCmd.Apply<PoisonPower>(randomEnemy, DynamicVars["PoisonAmount"].IntValue, Owner.Creature, this);
+            }
         }
     }
 

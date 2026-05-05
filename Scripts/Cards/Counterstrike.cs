@@ -18,7 +18,7 @@ namespace USCE.Scripts.Cards;
 [Pool(typeof(SilentCardPool))]
 public class Counterstrike : SilentCardModel, ILocalizationProvider
 {
-    private const int energyCost = 3;
+    private const int energyCost = 2;
     private const CardType type = CardType.Attack;
     private const CardRarity rarity = CardRarity.Uncommon;
     private const TargetType targetType = TargetType.AnyEnemy;
@@ -37,7 +37,7 @@ public class Counterstrike : SilentCardModel, ILocalizationProvider
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(25m, ValueProp.Move)
+        new DamageVar(16m, ValueProp.Move)
     ];
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
@@ -64,6 +64,6 @@ public class Counterstrike : SilentCardModel, ILocalizationProvider
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(4m);
+        DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }

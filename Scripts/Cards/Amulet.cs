@@ -38,7 +38,8 @@ public class Amulet : SilentCardModel
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new EnergyVar(1),
-        new DynamicVar("PoisonLoss", 3m)
+        new DynamicVar("PoisonLoss", 3m),
+        new DynamicVar("BonusEnergy", 1m)
     ];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
@@ -48,8 +49,8 @@ public class Amulet : SilentCardModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("护符", "获得{energyPrefix:energyIcons(1)}。\n如果敌方拥有[gold]中毒[/gold]，使其失去{PoisonLoss:diff()}层[gold]中毒[/gold]，额外获得{energyPrefix:energyIcons(1)}。"),
-        _ => new CardLoc("Amulet", "Gain {energyPrefix:energyIcons(1)}.\nIf the enemy has [gold]Poison[/gold], they lose {PoisonLoss:diff()} [gold]Poison[/gold] and you gain {energyPrefix:energyIcons(1)}.")
+        "zhs" => new CardLoc("护符", "获得{IfUpgraded:show:{energyPrefix:energyIcons(2)}|{energyPrefix:energyIcons(1)}}。\n如果敌方拥有[gold]中毒[/gold]，使其失去{PoisonLoss:diff()}层[gold]中毒[/gold]，额外获得{energyPrefix:energyIcons(1)}。"),
+        _ => new CardLoc("Amulet", "Gain {IfUpgraded:show:{energyPrefix:energyIcons(2)}|{energyPrefix:energyIcons(1)}}.\nIf the enemy has [gold]Poison[/gold], they lose {PoisonLoss:diff()} [gold]Poison[/gold] and you gain {energyPrefix:energyIcons(1)}.")
     };
 
     public Amulet() : base(energyCost, type, rarity, targetType)
@@ -58,10 +59,11 @@ public class Amulet : SilentCardModel
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        int energyGain = DynamicVars.Energy.IntValue;
+        int baseEnergy = IsUpgraded ? 2 : 1;
         int poisonLoss = DynamicVars["PoisonLoss"].IntValue;
+        int bonusEnergy = DynamicVars["BonusEnergy"].IntValue;
 
-        await PlayerCmd.GainEnergy(energyGain, Owner);
+        await PlayerCmd.GainEnergy(baseEnergy, Owner);
 
         if (cardPlay.Target != null)
         {
@@ -78,13 +80,12 @@ public class Amulet : SilentCardModel
                     poisonPower.SetAmount(newAmount);
                 }
 
-                await PlayerCmd.GainEnergy(energyGain, Owner);
+                await PlayerCmd.GainEnergy(bonusEnergy, Owner);
             }
         }
     }
 
     protected override void OnUpgrade()
     {
-        base.EnergyCost.UpgradeBy(-1);
     }
 }

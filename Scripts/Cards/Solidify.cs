@@ -27,7 +27,7 @@ public class Solidify : SilentCardModel, ILocalizationProvider
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        new BlockVar(25m, ValueProp.Move),
+        new BlockVar(24m, ValueProp.Move),
         new PowerVar<DexterityPower>("DexterityLoss", -1m)
     };
 
@@ -44,7 +44,7 @@ public class Solidify : SilentCardModel, ILocalizationProvider
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(5m);
+        DynamicVars.Block.UpgradeValueBy(4m);
     }
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch

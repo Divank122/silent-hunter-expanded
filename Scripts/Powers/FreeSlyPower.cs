@@ -26,8 +26,8 @@ public class FreeSlyPower : CustomPowerModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new PowerLoc("免费奇巧", "你的下一张奇巧牌耗能为0{energyPrefix:energyIcons(1)}。", "你的下[blue]{Amount}[/blue]张奇巧牌耗能为0{energyPrefix:energyIcons(1)}。"),
-        _ => new PowerLoc("Free Sly", "Your next Sly card costs 0 {energyPrefix:energyIcons(1)}.", "Your next [blue]{Amount}[/blue] Sly cards cost 0 {energyPrefix:energyIcons(1)}.")
+        "zhs" => new PowerLoc("免费奇巧", "你的下一张[gold]奇巧[/gold]牌耗能为0{energyPrefix:energyIcons(1)}。", "你的下[blue]{Amount}[/blue]张[gold]奇巧[/gold]牌耗能为0{energyPrefix:energyIcons(1)}。"),
+        _ => new PowerLoc("Free Sly", "Your next [gold]Sly[/gold] card costs 0 {energyPrefix:energyIcons(1)}.", "Your next [blue]{Amount}[/blue] [gold]Sly[/gold] cards cost 0 {energyPrefix:energyIcons(1)}.")
     };
 
     public override bool TryModifyEnergyCostInCombat(CardModel card, decimal originalCost, out decimal modifiedCost)

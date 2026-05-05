@@ -27,7 +27,7 @@ public class EagleEyeVision : SilentCardModel, ILocalizationProvider
 
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
-        new PowerVar<AccuracyPower>("AccuracyAmount", 8m)
+        new PowerVar<AccuracyPower>("AccuracyAmount", 7m)
     };
 
     public EagleEyeVision()
