@@ -56,6 +56,5 @@ public class Synthesize : SilentCardModel, ILocalizationProvider
 
     protected override void OnUpgrade()
     {
-        EnergyCost.SetCustomBaseCost(0);
     }
 }
