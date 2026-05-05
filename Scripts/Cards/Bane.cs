@@ -39,7 +39,7 @@ public class Bane : SilentCardModel, ILocalizationProvider
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("厄咒", "获得{IntangiblePower:diff()}层[gold]虚无[/gold]和{PoisonPower:diff()}层[gold]中毒[/gold]。\n每当本回合你受到攻击时，失去{PoisonLoss:diff()}层[gold]中毒[/gold]。"),
+        "zhs" => new CardLoc("厄咒", "获得{IntangiblePower:diff()}层[gold]无实体[/gold]和{PoisonPower:diff()}层[gold]中毒[/gold]。\n每当本回合你受到攻击时，失去{PoisonLoss:diff()}层[gold]中毒[/gold]。"),
         _ => new CardLoc("Bane", "Gain {IntangiblePower:diff()} [gold]Intangible[/gold] and {PoisonPower:diff()} [gold]Poison[/gold].\nWhenever you are attacked this turn, lose {PoisonLoss:diff()} [gold]Poison[/gold].")
     };
 
