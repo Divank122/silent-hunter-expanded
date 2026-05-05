@@ -23,15 +23,16 @@ public class SpiderWeb : SilentCardModel, ILocalizationProvider
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DynamicVar("WeakAmount", 1m)
+        new DynamicVar("InitialWeak", 1m),
+        new DynamicVar("FollowUpWeak", 1m)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("蛛网", "给予{WeakAmount:diff()}层[gold]虚弱[/gold]。\n你在这个回合内每次对该名敌人造成伤害时，额外给予{WeakAmount:diff()}层[gold]虚弱[/gold]。"),
-        _ => new CardLoc("Spider Web", "Apply {WeakAmount:diff()} [gold]Weak[/gold].\nEach time you deal damage to that enemy this turn, apply {WeakAmount:diff()} additional [gold]Weak[/gold].")
+        "zhs" => new CardLoc("蛛网", "给予{InitialWeak:diff()}层[gold]虚弱[/gold]。\n你在这个回合内该名敌人每次受到伤害时，额外给予{FollowUpWeak:diff()}层[gold]虚弱[/gold]。"),
+        _ => new CardLoc("Spider Web", "Apply {InitialWeak:diff()} [gold]Weak[/gold].\nEach time that enemy takes damage this turn, apply {FollowUpWeak:diff()} additional [gold]Weak[/gold].")
     };
 
     public SpiderWeb() : base(energyCost, type, rarity, targetType)
@@ -42,10 +43,12 @@ public class SpiderWeb : SilentCardModel, ILocalizationProvider
     {
         if (cardPlay.Target == null) return;
 
-        int weakAmount = DynamicVars["WeakAmount"].IntValue;
-        await PowerCmd.Apply<WeakPower>(cardPlay.Target, weakAmount, Owner.Creature, this);
+        int initialWeak = DynamicVars["InitialWeak"].IntValue;
+        int followUpWeak = DynamicVars["FollowUpWeak"].IntValue;
         
-        var power = await PowerCmd.Apply<SpiderWebPower>(cardPlay.Target, weakAmount, Owner.Creature, this);
+        await PowerCmd.Apply<WeakPower>(cardPlay.Target, initialWeak, Owner.Creature, this);
+        
+        var power = await PowerCmd.Apply<SpiderWebPower>(cardPlay.Target, followUpWeak, Owner.Creature, this);
         if (power != null)
         {
             power.SourcePlayer = Owner.Creature;
@@ -54,6 +57,6 @@ public class SpiderWeb : SilentCardModel, ILocalizationProvider
 
     protected override void OnUpgrade()
     {
-        DynamicVars["WeakAmount"].UpgradeValueBy(1m);
+        DynamicVars["InitialWeak"].UpgradeValueBy(1m);
     }
 }

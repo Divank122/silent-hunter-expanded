@@ -22,7 +22,7 @@
     </Reference>
 
     <Reference Include="BaseLib">
-      <HintPath>$(Sts2Dir)\mods\BaseLib3.0.6\BaseLib.dll</HintPath>
+      <HintPath>$(Sts2Dir)\mods\BaseLib\BaseLib.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
