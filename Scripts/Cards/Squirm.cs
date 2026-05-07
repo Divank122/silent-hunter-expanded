@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
@@ -26,23 +24,10 @@ public class Squirm : SilentCardModel
 
     public override bool GainsBlock => true;
 
-    protected override bool ShouldGlowGoldInternal
-    {
-        get
-        {
-            if (CombatState == null)
-            {
-                return false;
-            }
-            return CombatState.HittableEnemies.Any(e => e.GetPower<PoisonPower>()?.Amount > 0);
-        }
-    }
-
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new BlockVar(8m, ValueProp.Move),
-        new DynamicVar("PoisonLoss", 3m),
-        new BlockVar("BonusBlock", 6m, ValueProp.Move)
+        new DynamicVar("PoisonAmount", 2m)
     ];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
@@ -52,8 +37,8 @@ public class Squirm : SilentCardModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("蠕动", "获得{Block:diff()}点[gold]格挡[/gold]。\n如果敌方拥有[gold]中毒[/gold]，使其失去{PoisonLoss:diff()}层[gold]中毒[/gold]，额外获得{BonusBlock:diff()}点[gold]格挡[/gold]。"),
-        _ => new CardLoc("Squirm", "Gain {Block:diff()} [gold]Block[/gold].\nIf the enemy has [gold]Poison[/gold], they lose {PoisonLoss:diff()} [gold]Poison[/gold] and you gain {BonusBlock:diff()} [gold]Block[/gold].")
+        "zhs" => new CardLoc("蠕动", "获得{Block:diff()}点[gold]格挡[/gold]。\n给予{PoisonAmount:diff()}层[gold]中毒[/gold]。"),
+        _ => new CardLoc("Squirm", "Gain {Block:diff()} [gold]Block[/gold].\nApply {PoisonAmount:diff()} [gold]Poison[/gold].")
     };
 
     public Squirm() : base(energyCost, type, rarity, targetType)
@@ -66,30 +51,14 @@ public class Squirm : SilentCardModel
 
         if (cardPlay.Target != null)
         {
-            var poisonPower = cardPlay.Target.GetPower<PoisonPower>();
-            if (poisonPower != null && poisonPower.Amount > 0)
-            {
-                int poisonLoss = DynamicVars["PoisonLoss"].IntValue;
-
-                int newAmount = poisonPower.Amount - poisonLoss;
-                if (newAmount <= 0)
-                {
-                    await PowerCmd.Remove(poisonPower);
-                }
-                else
-                {
-                    poisonPower.SetAmount(newAmount);
-                }
-
-                var bonusBlockVar = (BlockVar)DynamicVars["BonusBlock"];
-                await CreatureCmd.GainBlock(Owner.Creature, bonusBlockVar, cardPlay);
-            }
+            int poisonAmount = DynamicVars["PoisonAmount"].IntValue;
+            await PowerCmd.Apply<PoisonPower>(cardPlay.Target, poisonAmount, Owner.Creature, this);
         }
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars.Block.UpgradeValueBy(3m);
-        DynamicVars["BonusBlock"].UpgradeValueBy(2m);
+        DynamicVars["PoisonAmount"].UpgradeValueBy(1m);
     }
 }
