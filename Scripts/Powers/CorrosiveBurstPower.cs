@@ -24,8 +24,8 @@ public class CorrosiveBurstPower : CustomPowerModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new PowerLoc("猛蚀", "每当你给予敌人中毒，使其受到18点伤害。", "每当你给予敌人[gold]中毒[/gold]，使其受到[blue]{Amount}[/blue]点伤害。"),
-        _ => new PowerLoc("Corrosive Burst", "Whenever you apply Poison to an enemy, they take 18 damage.", "Whenever you apply [gold]Poison[/gold] to an enemy, they take [blue]{Amount}[/blue] damage.")
+        "zhs" => new PowerLoc("猛蚀", "每当你给予敌人中毒，使其受到26点伤害。", "每当你给予敌人[gold]中毒[/gold]，使其受到[blue]{Amount}[/blue]点伤害。"),
+        _ => new PowerLoc("Corrosive Burst", "Whenever you apply Poison to an enemy, they take 26 damage.", "Whenever you apply [gold]Poison[/gold] to an enemy, they take [blue]{Amount}[/blue] damage.")
     };
 
     public override async Task AfterPowerAmountChanged(PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
