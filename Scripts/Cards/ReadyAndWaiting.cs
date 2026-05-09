@@ -23,7 +23,7 @@ public class ReadyAndWaiting : SilentCardModel, ILocalizationProvider
     ];
 
     public ReadyAndWaiting()
-        : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+        : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
     }
 
