@@ -47,6 +47,6 @@ public class Alchemy : SilentCardModel
 
     protected override void OnUpgrade()
     {
-        DynamicVars["Gold"].UpgradeValueBy(5m);
+        DynamicVars["Gold"].UpgradeValueBy(10m);
     }
 }
