@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 
@@ -16,21 +16,18 @@ public class MirrorImagePower : CustomPowerModel
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromCard<MegaCrit.Sts2.Core.Models.Cards.Shiv>(false)
+    ];
+
     public override string? CustomPackedIconPath => "res://UltimateSilentCardExpansion/images/powers/usce_mirror_image_power.png";
     public override string? CustomBigIconPath => "res://UltimateSilentCardExpansion/images/powers/usce_mirror_image_power.png";
 
-    private static readonly HashSet<CardModel> _cardsPlayedByMirrorImage = new();
-
-    public static bool WasPlayedByMirrorImage(CardModel card) => _cardsPlayedByMirrorImage.Contains(card);
-
-    public static void MarkAsPlayedByMirrorImage(CardModel card) => _cardsPlayedByMirrorImage.Add(card);
-
-    public static void ClearAll() => _cardsPlayedByMirrorImage.Clear();
-
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new PowerLoc("镜中倒影", "每当你打出攻击牌时，随机打出你手牌中的另外1张攻击牌。", "每当你打出攻击牌时，随机打出你[gold]手牌[/gold]中的另外[blue]{Amount}[/blue]张攻击牌。"),
-        _ => new PowerLoc("Mirror Image", "Whenever you play an Attack, play 1 other random Attack from your hand.", "Whenever you play an Attack, play [blue]{Amount}[/blue] other random Attack(s) from your [gold]hand[/gold].")
+        "zhs" => new PowerLoc("镜中倒影", "每当你打出一张不是[gold]小刀[/gold]的攻击牌时，将一张[gold]小刀[/gold]添加到你的[gold]手牌[/gold]。", "每当你打出一张不是[gold]小刀[/gold]的攻击牌时，将[blue]{Amount}[/blue]张[gold]小刀[/gold]添加到你的[gold]手牌[/gold]。"),
+        _ => new PowerLoc("Mirror Image", "Whenever you play a non-[gold]Shiv[/gold] Attack, add a [gold]Shiv[/gold] to your [gold]hand[/gold].", "Whenever you play a non-[gold]Shiv[/gold] Attack, add [blue]{Amount}[/blue] [gold]Shiv(s)[/gold] to your [gold]hand[/gold].")
     };
 
     public override async Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
@@ -41,32 +38,53 @@ public class MirrorImagePower : CustomPowerModel
         if (cardPlay.Card.Type != CardType.Attack)
             return;
 
-        if (WasPlayedByMirrorImage(cardPlay.Card))
+        if (cardPlay.Card is MegaCrit.Sts2.Core.Models.Cards.Shiv)
             return;
-
-        var hand = PileType.Hand.GetPile(Owner.Player!).Cards;
-        var otherAttacks = hand
-            .Where(c => c.Type == CardType.Attack && c != cardPlay.Card && !WasPlayedByMirrorImage(c))
-            .ToList();
-
-        if (otherAttacks.Count == 0)
-            return;
-
-        int attacksToPlay = (int)Amount;
-        if (attacksToPlay > otherAttacks.Count)
-            attacksToPlay = otherAttacks.Count;
 
         Flash();
 
-        for (int i = 0; i < attacksToPlay; i++)
+        int shivsToAdd = (int)Amount;
+        await MegaCrit.Sts2.Core.Models.Cards.Shiv.CreateInHand(Owner.Player!, shivsToAdd, CombatState);
+    }
+}
+
+public class MirrorImagePowerPlus : CustomPowerModel
+{
+    public override PowerType Type => PowerType.Buff;
+    public override PowerStackType StackType => PowerStackType.Counter;
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+    [
+        HoverTipFactory.FromCard<MegaCrit.Sts2.Core.Models.Cards.Shiv>(true)
+    ];
+
+    public override string? CustomPackedIconPath => "res://UltimateSilentCardExpansion/images/powers/usce_mirror_image_power.png";
+    public override string? CustomBigIconPath => "res://UltimateSilentCardExpansion/images/powers/usce_mirror_image_power.png";
+
+    public override List<(string, string)>? Localization => LocManager.Instance.Language switch
+    {
+        "zhs" => new PowerLoc("镜中倒影+", "每当你打出一张不是[gold]小刀[/gold]的攻击牌时，将一张[gold]小刀+[/gold]添加到你的[gold]手牌[/gold]。", "每当你打出一张不是[gold]小刀[/gold]的攻击牌时，将[blue]{Amount}[/blue]张[gold]小刀+[/gold]添加到你的[gold]手牌[/gold]。"),
+        _ => new PowerLoc("Mirror Image+", "Whenever you play a non-[gold]Shiv[/gold] Attack, add a [gold]Shiv+[/gold] to your [gold]hand[/gold].", "Whenever you play a non-[gold]Shiv[/gold] Attack, add [blue]{Amount}[/blue] [gold]Shiv(s)+[/gold] to your [gold]hand[/gold].")
+    };
+
+    public override async Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
+    {
+        if (cardPlay.Card.Owner.Creature != Owner)
+            return;
+
+        if (cardPlay.Card.Type != CardType.Attack)
+            return;
+
+        if (cardPlay.Card is MegaCrit.Sts2.Core.Models.Cards.Shiv)
+            return;
+
+        Flash();
+
+        int shivsToAdd = (int)Amount;
+        var shivs = await MegaCrit.Sts2.Core.Models.Cards.Shiv.CreateInHand(Owner.Player!, shivsToAdd, CombatState);
+        foreach (var shiv in shivs)
         {
-            var randomAttack = Owner.Player!.RunState.Rng.CombatTargets.NextItem(otherAttacks);
-            if (randomAttack != null)
-            {
-                MarkAsPlayedByMirrorImage(randomAttack);
-                await CardCmd.AutoPlay(context, randomAttack, null);
-                otherAttacks.Remove(randomAttack);
-            }
+            CardCmd.Upgrade(shiv);
         }
     }
 }

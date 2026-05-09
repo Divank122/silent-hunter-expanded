@@ -5,8 +5,8 @@ using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
-using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using USCE.Scripts.Powers;
 
@@ -15,30 +15,36 @@ namespace USCE.Scripts.Cards;
 [Pool(typeof(SilentCardPool))]
 public class MirrorImage : SilentCardModel, ILocalizationProvider
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars =>
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
-        new PowerVar<MirrorImagePower>(1m)
+        HoverTipFactory.FromCard<MegaCrit.Sts2.Core.Models.Cards.Shiv>(IsUpgraded)
     ];
 
     public MirrorImage()
-        : base(3, CardType.Power, CardRarity.Rare, TargetType.Self)
+        : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
-        await PowerCmd.Apply<MirrorImagePower>(Owner.Creature, DynamicVars["MirrorImagePower"].BaseValue, Owner.Creature, this);
+        if (IsUpgraded)
+        {
+            await PowerCmd.Apply<MirrorImagePowerPlus>(Owner.Creature, 1m, Owner.Creature, this);
+        }
+        else
+        {
+            await PowerCmd.Apply<MirrorImagePower>(Owner.Creature, 1m, Owner.Creature, this);
+        }
     }
 
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
     }
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("镜中倒影", "每当你打出攻击牌时，随机打出你[gold]手牌[/gold]中的另外{MirrorImagePower:diff()}张攻击牌。"),
-        _ => new CardLoc("Mirror Image", "Whenever you play an Attack, play {MirrorImagePower:diff()} other random Attack(s) from your [gold]hand[/gold].")
+        "zhs" => new CardLoc("镜中倒影", "每当你打出一张不是[gold]小刀[/gold]的攻击牌时，将一张[gold]{IfUpgraded:show:小刀+|小刀}[/gold]添加到你的[gold]手牌[/gold]。"),
+        _ => new CardLoc("Mirror Image", "Whenever you play a non-[gold]Shiv[/gold] Attack, add a [gold]{IfUpgraded:show:Shiv+|Shiv}[/gold] to your [gold]hand[/gold].")
     };
 }
