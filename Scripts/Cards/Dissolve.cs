@@ -54,7 +54,7 @@ public class Dissolve : SilentCardModel
 
     public override async Task AfterCardDiscarded(PlayerChoiceContext choiceContext, CardModel card)
     {
-        if (card == this && Pile != null && Pile.Type == PileType.Discard)
+        if (Pile != null && Pile.Type != PileType.Hand)
         {
             await CardPileCmd.Add(this, PileType.Hand);
         }
