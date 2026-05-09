@@ -16,4 +16,7 @@ public class USCEKeywords
 
     [CustomEnum("Extinct")] [KeywordProperties(AutoKeywordPosition.Before)]
     public static CardKeyword Extinct;
+
+    [CustomEnum("Drifting")] [KeywordProperties(AutoKeywordPosition.Before)]
+    public static CardKeyword Drifting;
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
+using Godot;
 using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -26,6 +27,15 @@ public class ChaosStrike : SilentCardModel
 
     protected override HashSet<CardTag> CanonicalTags => new HashSet<CardTag> { CardTag.Strike };
 
+    public override IEnumerable<CardKeyword> CanonicalKeywords 
+    { 
+        get
+        {
+            GD.Print($"[ChaosStrike] CanonicalKeywords called, Drifting value: {USCEKeywords.Drifting}");
+            return [USCEKeywords.Drifting];
+        }
+    }
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(7m, ValueProp.Move)
@@ -33,8 +43,8 @@ public class ChaosStrike : SilentCardModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("混乱打击", "造成{Damage:diff()}点伤害2次。\n丢弃1张牌。\n当你打出其他牌时，将这张牌从[gold]手牌[/gold]中丢弃。"),
-        _ => new CardLoc("Chaos Strike", "Deal {Damage:diff()} damage twice. \nDiscard 1 card.\nWhen you play another card, discard this from your [gold]hand[/gold].")
+        "zhs" => new CardLoc("混乱打击", "造成{Damage:diff()}点伤害2次。\n丢弃2张牌。"),
+        _ => new CardLoc("Chaos Strike", "Deal {Damage:diff()} damage twice. \nDiscard 2 cards.")
     };
 
     public ChaosStrike() : base(energyCost, type, rarity, targetType)
@@ -55,7 +65,7 @@ public class ChaosStrike : SilentCardModel
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        var cardToDiscard = await CardSelectCmd.FromHandForDiscard(choiceContext, Owner, new CardSelectorPrefs(CardSelectorPrefs.DiscardSelectionPrompt, 1), null, this);
+        var cardToDiscard = await CardSelectCmd.FromHandForDiscard(choiceContext, Owner, new CardSelectorPrefs(CardSelectorPrefs.DiscardSelectionPrompt, 2), null, this);
         await CardCmd.Discard(choiceContext, cardToDiscard);
     }
 
