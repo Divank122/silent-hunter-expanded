@@ -57,11 +57,7 @@ public class ChaosStrike : SilentCardModel
 
         int damage = (int)DynamicVars.Damage.BaseValue;
 
-        await DamageCmd.Attack(damage).FromCard(this).Targeting(cardPlay.Target)
-            .WithHitFx("vfx/vfx_attack_slash")
-            .Execute(choiceContext);
-
-        await DamageCmd.Attack(damage).FromCard(this).Targeting(cardPlay.Target)
+        await DamageCmd.Attack(damage).WithHitCount(2).FromCard(this).Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
