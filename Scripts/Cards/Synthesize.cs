@@ -22,7 +22,7 @@ public class Synthesize : SilentCardModel, ILocalizationProvider
     private const CardRarity rarity = CardRarity.Rare;
     private const TargetType targetType = TargetType.Self;
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => IsUpgraded ? new List<CardKeyword>() : new List<CardKeyword> { CardKeyword.Exhaust };
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
@@ -56,5 +56,6 @@ public class Synthesize : SilentCardModel, ILocalizationProvider
 
     protected override void OnUpgrade()
     {
+        RemoveKeyword(CardKeyword.Exhaust);
     }
 }
