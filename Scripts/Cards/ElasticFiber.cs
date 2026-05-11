@@ -27,7 +27,7 @@ public class ElasticFiber : SilentCardModel, ILocalizationProvider
     protected override IEnumerable<DynamicVar> CanonicalVars => new DynamicVar[]
     {
         new PowerVar<PlatingPower>("PlayerPlating", 6m),
-        new PowerVar<PlatingPower>("EnemyPlating", 5m)
+        new PowerVar<PlatingPower>("EnemyPlating", 6m)
     };
 
     public ElasticFiber()
