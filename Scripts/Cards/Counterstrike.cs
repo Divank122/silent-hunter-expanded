@@ -37,13 +37,13 @@ public class Counterstrike : SilentCardModel, ILocalizationProvider
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(16m, ValueProp.Move)
+        new DamageVar(10m, ValueProp.Move)
     ];
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("针锋相对", "造成{Damage:diff()}点伤害。如果敌人的意图是攻击，额外造成一次伤害。"),
-        _ => new CardLoc("Counterstrike", "Deal {Damage:diff()} damage. If the enemy intends to attack, deal damage again.")
+        "zhs" => new CardLoc("针锋相对", "造成{Damage:diff()}点伤害。如果敌人的意图是攻击，额外造成2次伤害。"),
+        _ => new CardLoc("Counterstrike", "Deal {Damage:diff()} damage. If the enemy intends to attack, deal damage 2 more times.")
     };
 
     public Counterstrike() : base(energyCost, type, rarity, targetType)
@@ -55,7 +55,7 @@ public class Counterstrike : SilentCardModel, ILocalizationProvider
         ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
 
         int damage = (int)DynamicVars.Damage.BaseValue;
-        int hitCount = cardPlay.Target.Monster?.IntendsToAttack == true ? 2 : 1;
+        int hitCount = cardPlay.Target.Monster?.IntendsToAttack == true ? 3 : 1;
 
         await DamageCmd.Attack(damage).WithHitCount(hitCount).FromCard(this).Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
@@ -64,6 +64,6 @@ public class Counterstrike : SilentCardModel, ILocalizationProvider
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m);
+        DynamicVars.Damage.UpgradeValueBy(2m);
     }
 }
