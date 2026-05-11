@@ -28,6 +28,8 @@ public class BladeMountain : SilentCardModel, ILocalizationProvider
         new PowerVar<BladeMountainPower>(1m)
     ];
 
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
+
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
         HoverTipFactory.FromKeyword(USCEKeywords.GreatBlade),
