@@ -13,14 +13,14 @@ using USCE.Scripts.Powers;
 namespace USCE.Scripts.Cards;
 
 [Pool(typeof(SilentCardPool))]
-public class MirrorImage : SilentCardModel, ILocalizationProvider
+public class Effortless : SilentCardModel, ILocalizationProvider
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
         HoverTipFactory.FromCard<MegaCrit.Sts2.Core.Models.Cards.Shiv>(IsUpgraded)
     ];
 
-    public MirrorImage()
+    public Effortless()
         : base(2, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
     }
@@ -30,11 +30,11 @@ public class MirrorImage : SilentCardModel, ILocalizationProvider
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         if (IsUpgraded)
         {
-            await PowerCmd.Apply<MirrorImagePowerPlus>(Owner.Creature, 1m, Owner.Creature, this);
+            await PowerCmd.Apply<EffortlessPowerPlus>(Owner.Creature, 1m, Owner.Creature, this);
         }
         else
         {
-            await PowerCmd.Apply<MirrorImagePower>(Owner.Creature, 1m, Owner.Creature, this);
+            await PowerCmd.Apply<EffortlessPower>(Owner.Creature, 1m, Owner.Creature, this);
         }
     }
 
@@ -44,7 +44,7 @@ public class MirrorImage : SilentCardModel, ILocalizationProvider
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("镜中倒影", "每当你打出一张不是[gold]小刀[/gold]的攻击牌时，将一张[gold]{IfUpgraded:show:小刀+|小刀}[/gold]添加到你的[gold]手牌[/gold]。"),
-        _ => new CardLoc("Mirror Image", "Whenever you play a non-[gold]Shiv[/gold] Attack, add a [gold]{IfUpgraded:show:Shiv+|Shiv}[/gold] to your [gold]hand[/gold].")
+        "zhs" => new CardLoc("游刃有余", "每当你打出一张不是[gold]小刀[/gold]的攻击牌时，将一张[gold]{IfUpgraded:show:小刀+|小刀}[/gold]添加到你的[gold]手牌[/gold]。"),
+        _ => new CardLoc("Effortless", "Whenever you play a non-[gold]Shiv[/gold] Attack, add a [gold]{IfUpgraded:show:Shiv+|Shiv}[/gold] to your [gold]hand[/gold].")
     };
 }

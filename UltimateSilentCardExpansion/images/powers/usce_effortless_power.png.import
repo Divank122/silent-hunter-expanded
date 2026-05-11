@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfss203ob6ld3"
-path="res://.godot/imported/usce_mirror_image.png-40bb2889ec72738c1aef6482e7ac499a.ctex"
+uid="uid://kp22tbxlmpsc"
+path="res://.godot/imported/usce_effortless_power.png-9c60b9c6eec862a421700717b1f20e97.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UltimateSilentCardExpansion/images/cards/usce_mirror_image.png"
-dest_files=["res://.godot/imported/usce_mirror_image.png-40bb2889ec72738c1aef6482e7ac499a.ctex"]
+source_file="res://UltimateSilentCardExpansion/images/powers/usce_effortless_power.png"
+dest_files=["res://.godot/imported/usce_effortless_power.png-9c60b9c6eec862a421700717b1f20e97.ctex"]
 
 [params]
 
