@@ -9,6 +9,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
+using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Powers;
 using USCE.Scripts.Powers;
 
@@ -24,7 +25,7 @@ public class Clot : SilentCardModel, ILocalizationProvider
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new PowerVar<ClotPower>(2m)
+        new PowerVar<ClotPower>(3m)
     ];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
@@ -51,6 +52,6 @@ public class Clot : SilentCardModel, ILocalizationProvider
 
     protected override void OnUpgrade()
     {
-        DynamicVars["ClotPower"].UpgradeValueBy(1m);
+        AddKeyword(CardKeyword.Innate);
     }
 }
