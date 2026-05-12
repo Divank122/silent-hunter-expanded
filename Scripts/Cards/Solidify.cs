@@ -53,7 +53,7 @@ public class Solidify : SilentCardModel, ILocalizationProvider
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("凝固", "获得{Block:diff()}点[gold]格挡[/gold]。失去1点敏捷。"),
+        "zhs" => new CardLoc("凝固", "获得{Block:diff()}点[gold]格挡[/gold]。\n失去1点敏捷。"),
         _ => new CardLoc("Solidify", "Gain {Block:diff()} [gold]Block[/gold]. Lose 1 Dexterity.")
     };
 }
