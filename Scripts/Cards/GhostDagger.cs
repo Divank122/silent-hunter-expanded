@@ -22,7 +22,7 @@ using USCE.Scripts.Powers;
 namespace USCE.Scripts.Cards;
 
 [Pool(typeof(SilentCardPool))]
-public class GhostBlade : SilentCardModel, ILocalizationProvider
+public class GhostDagger : SilentCardModel, ILocalizationProvider
 {
     private const int energyCost = 0;
     private const CardType type = CardType.Attack;
@@ -44,8 +44,8 @@ public class GhostBlade : SilentCardModel, ILocalizationProvider
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("幽灵之刃", "造成{Damage:diff()}点伤害。\n如果敌人有[gold]虚弱[/gold]，在下个回合将1张[gold]幽灵之刃[/gold]加入你的[gold]手牌[/gold]。"),
-        _ => new CardLoc("Ghost Blade", "Deal {Damage:diff()} damage.\nIf the enemy is [gold]Weak[/gold], next turn add 1 [gold]Ghost Blade[/gold] to your [gold]hand[/gold].")
+        "zhs" => new CardLoc("幽灵匕首", "造成{Damage:diff()}点伤害。\n如果敌人有[gold]虚弱[/gold]，在下个回合将1张[gold]幽灵匕首[/gold]加入你的[gold]手牌[/gold]。"),
+        _ => new CardLoc("Ghost Dagger", "Deal {Damage:diff()} damage.\nIf the enemy is [gold]Weak[/gold], next turn add 1 [gold]Ghost Dagger[/gold] to your [gold]hand[/gold].")
     };
 
     protected override bool ShouldGlowGoldInternal
@@ -57,7 +57,7 @@ public class GhostBlade : SilentCardModel, ILocalizationProvider
         }
     }
 
-    public GhostBlade() : base(energyCost, type, rarity, targetType)
+    public GhostDagger() : base(energyCost, type, rarity, targetType)
     {
     }
 
@@ -65,14 +65,25 @@ public class GhostBlade : SilentCardModel, ILocalizationProvider
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target, "cardPlay.Target");
 
+        bool hasWeakBefore = cardPlay.Target.GetPower<WeakPower>() != null;
+
         int damage = (int)DynamicVars.Damage.BaseValue;
         await DamageCmd.Attack(damage).FromCard(this).Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
 
-        if (cardPlay.Target.GetPower<WeakPower>() != null)
+        bool hasWeakAfter = !cardPlay.Target.IsDead && cardPlay.Target.GetPower<WeakPower>() != null;
+
+        if (hasWeakBefore || hasWeakAfter)
         {
-            await PowerCmd.Apply<GhostBladePower>(Owner.Creature, 1m, Owner.Creature, this);
+            if (IsUpgraded)
+            {
+                await PowerCmd.Apply<GhostDaggerPowerPlus>(Owner.Creature, 1m, Owner.Creature, this);
+            }
+            else
+            {
+                await PowerCmd.Apply<GhostDaggerPower>(Owner.Creature, 1m, Owner.Creature, this);
+            }
         }
     }
 
@@ -86,12 +97,12 @@ public class GhostBlade : SilentCardModel, ILocalizationProvider
         if (count == 0) return Array.Empty<CardModel>();
         if (CombatManager.Instance.IsOverOrEnding) return Array.Empty<CardModel>();
 
-        List<CardModel> blades = new List<CardModel>();
+        List<CardModel> daggers = new List<CardModel>();
         for (int i = 0; i < count; i++)
         {
-            blades.Add(combatState.CreateCard<GhostBlade>(owner));
+            daggers.Add(combatState.CreateCard<GhostDagger>(owner));
         }
-        await CardPileCmd.AddGeneratedCardsToCombat(blades, PileType.Hand, addedByPlayer: true);
-        return blades;
+        await CardPileCmd.AddGeneratedCardsToCombat(daggers, PileType.Hand, addedByPlayer: true);
+        return daggers;
     }
 }
