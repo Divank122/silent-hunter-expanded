@@ -38,7 +38,7 @@ public class EffortlessPower : CustomPowerModel
         if (cardPlay.Card.Type != CardType.Attack)
             return;
 
-        if (cardPlay.Card is MegaCrit.Sts2.Core.Models.Cards.Shiv)
+        if (cardPlay.Card.Tags.Contains(CardTag.Shiv))
             return;
 
         Flash();
@@ -75,7 +75,7 @@ public class EffortlessPowerPlus : CustomPowerModel
         if (cardPlay.Card.Type != CardType.Attack)
             return;
 
-        if (cardPlay.Card is MegaCrit.Sts2.Core.Models.Cards.Shiv)
+        if (cardPlay.Card.Tags.Contains(CardTag.Shiv))
             return;
 
         Flash();
