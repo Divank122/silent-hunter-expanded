@@ -34,7 +34,7 @@ public class Calculated : SilentCardModel, ILocalizationProvider
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(1m);
+        base.EnergyCost.UpgradeBy(-1);
     }
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
