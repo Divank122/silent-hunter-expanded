@@ -1,5 +1,5 @@
 {
-  "FROSTY.description": "When played, gain [gold]Block[/gold] equal to half the damage dealt.",
-  "FROSTY.extraCardText": "Gain [gold]Block[/gold] equal to half the damage dealt.",
-  "FROSTY.title": "Frosty"
+  "USCE-FROSTY.description": "When played, gain [gold]Block[/gold] equal to half the damage dealt.",
+  "USCE-FROSTY.extraCardText": "Gain [gold]Block[/gold] equal to half the damage dealt.",
+  "USCE-FROSTY.title": "Frosty"
 }

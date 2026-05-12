@@ -49,7 +49,7 @@ public class BladeOfFrost : SilentCardModel, ILocalizationProvider
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("霜之刃", "添加2张[purple]寒霜[/purple][gold]小刀[/gold]到你的[gold]手牌[/gold]。"),
-        _ => new CardLoc("Blade of Frost", "Add 2 [purple]Frosty[/purple] [gold]Shiv[/gold](s) to your [gold]hand[/gold].")
+        "zhs" => new CardLoc("霜之刃", "添加2张[purple]寒霜[/purple][gold]{IfUpgraded:show:小刀+|小刀}[/gold]到你的[gold]手牌[/gold]。"),
+        _ => new CardLoc("Blade of Frost", "Add 2 [purple]Frosty[/purple] [gold]{IfUpgraded:show:Shiv+|Shiv}[/gold](s) to your [gold]hand[/gold].")
     };
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -10,8 +11,10 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace USCE.Scripts.Enchantments;
 
-public class Frosty : EnchantmentModel
+public class Frosty : CustomEnchantmentModel
 {
+    protected override string? CustomIconPath => "res://UltimateSilentCardExpansion/images/enchantments/usce_frosty.png";
+
     public override bool HasExtraCardText => true;
 
     public override bool ShowAmount => false;
