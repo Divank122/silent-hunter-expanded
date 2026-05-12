@@ -53,6 +53,6 @@ public class SpiderWeb : SilentCardModel, ILocalizationProvider
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Energy.UpgradeValueBy(-1m);
+        EnergyCost.UpgradeBy(-1);
     }
 }
