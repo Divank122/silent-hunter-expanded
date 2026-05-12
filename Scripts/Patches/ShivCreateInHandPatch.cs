@@ -163,7 +163,7 @@ public static class ShivCreateInHandPatches
         var sourceType = FindNearestSource();
         if (sourceType == SourceType.Power)
         {
-            __result = CreateGreatBlades(owner, normalAmount, plusAmount);
+            __result = CreateGreatBlades(owner, 1, normalAmount, plusAmount);
             return false;
         }
 
@@ -174,7 +174,7 @@ public static class ShivCreateInHandPatches
         }
         _playersWhoGotGreatBladeFromCardPlay.Add(owner);
 
-        __result = CreateGreatBlades(owner, normalAmount, plusAmount);
+        __result = CreateGreatBlades(owner, 1, normalAmount, plusAmount);
         return false;
     }
 
@@ -207,18 +207,18 @@ public static class ShivCreateInHandPatches
             _shouldSkipUpgrade = false;
         }
 
-        __result = CreateGreatBladesMultiple(owner, normalAmount, plusAmount);
+        __result = CreateGreatBladesMultiple(owner, count, normalAmount, plusAmount);
         return false;
     }
 
-    private static async Task<CardModel?> CreateGreatBlades(Player owner, int normalAmount, int plusAmount)
+    private static async Task<CardModel?> CreateGreatBlades(Player owner, int shivCount, int normalAmount, int plusAmount)
     {
         var combatState = owner.Creature.CombatState!;
         CardModel? firstBlade = null;
 
         if (normalAmount > 0)
         {
-            var blades = await GreatBlade.CreateInHand(owner, normalAmount, combatState);
+            var blades = await GreatBlade.CreateInHand(owner, shivCount * normalAmount, combatState);
             foreach (var blade in blades)
             {
                 if (firstBlade == null)
@@ -230,7 +230,7 @@ public static class ShivCreateInHandPatches
 
         if (plusAmount > 0)
         {
-            var blades = await GreatBlade.CreateInHand(owner, plusAmount, combatState);
+            var blades = await GreatBlade.CreateInHand(owner, shivCount * plusAmount, combatState);
             foreach (var blade in blades)
             {
                 blade.UpgradeInternal();
@@ -245,20 +245,20 @@ public static class ShivCreateInHandPatches
         return firstBlade;
     }
 
-    private static async Task<IEnumerable<CardModel>> CreateGreatBladesMultiple(Player owner, int normalAmount, int plusAmount)
+    private static async Task<IEnumerable<CardModel>> CreateGreatBladesMultiple(Player owner, int shivCount, int normalAmount, int plusAmount)
     {
         var combatState = owner.Creature.CombatState!;
         var result = new List<CardModel>();
 
         if (normalAmount > 0)
         {
-            var blades = await GreatBlade.CreateInHand(owner, normalAmount, combatState);
+            var blades = await GreatBlade.CreateInHand(owner, shivCount * normalAmount, combatState);
             result.AddRange(blades);
         }
 
         if (plusAmount > 0)
         {
-            var blades = await GreatBlade.CreateInHand(owner, plusAmount, combatState);
+            var blades = await GreatBlade.CreateInHand(owner, shivCount * plusAmount, combatState);
             foreach (var blade in blades)
             {
                 blade.UpgradeInternal();
