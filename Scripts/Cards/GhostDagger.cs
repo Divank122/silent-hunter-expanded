@@ -39,13 +39,14 @@ public class GhostDagger : SilentCardModel, ILocalizationProvider
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
-        HoverTipFactory.FromPower<WeakPower>()
+        HoverTipFactory.FromPower<WeakPower>(),
+        HoverTipFactory.FromCard<GhostDagger>(IsUpgraded)
     ];
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("幽灵匕首", "造成{Damage:diff()}点伤害。\n如果敌人有[gold]虚弱[/gold]，在下个回合将1张[gold]幽灵匕首[/gold]加入你的[gold]手牌[/gold]。"),
-        _ => new CardLoc("Ghost Dagger", "Deal {Damage:diff()} damage.\nIf the enemy is [gold]Weak[/gold], next turn add 1 [gold]Ghost Dagger[/gold] to your [gold]hand[/gold].")
+        "zhs" => new CardLoc("幽灵匕首", "造成{Damage:diff()}点伤害。\n如果敌人有[gold]虚弱[/gold]，在下个回合将1张[gold]{IfUpgraded:show:幽灵匕首+|幽灵匕首}[/gold]加入你的[gold]手牌[/gold]。"),
+        _ => new CardLoc("Ghost Dagger", "Deal {Damage:diff()} damage.\nIf the enemy is [gold]Weak[/gold], next turn add 1 [gold]{IfUpgraded:show:Ghost Dagger+|Ghost Dagger}[/gold] to your [gold]hand[/gold].")
     };
 
     protected override bool ShouldGlowGoldInternal
