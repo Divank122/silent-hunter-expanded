@@ -1,6 +1,6 @@
 # 更新日志
 
-## [Unreleased]
+## [0.2.0] - 2026-05-14
 
 ### 新增
 - **穷追不舍 (Relentless Pursuit)**: 新增1费罕见能力牌，打出攻击牌时如果手牌中有同名牌，额外造成4/6点伤害。
@@ -17,6 +17,8 @@
 - **巨刀 (Great Blade)**: 描述使用 `{Damage:diff()}` 替代 `{Damage}`，正确显示升级高亮
 - **刀山能力 (BladeMountainPower)**: 堆叠类型从 Counter 改为 Single，描述更新
 - **小刀替换逻辑**: 简化 ShivCreateInHandPatch，使用 GreatBladeModifierPower 处理伤害减半
+
+## [Unreleased]
 
 ## [0.1.3] - 2026-05-13
 
