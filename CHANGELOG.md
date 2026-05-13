@@ -2,11 +2,18 @@
 
 ## [Unreleased]
 
+### 新增
+- **穷追不舍 (Relentless Pursuit)**: 新增1费罕见能力牌，打出攻击牌时如果手牌中有同名牌，额外造成4/6点伤害。
+
 ### 重做
 - **巨刀 (Great Blade)**: 重做为0费攻击牌，造成16点伤害，手牌中每有一张其他小刀伤害减半一次。原效果为2费造成15点伤害。
 - **刀山 (Blade Mountain)**: 移除保留关键字，描述从"所有获得小刀的效果改为获得1张巨刀"改为"每当你获得小刀时，改为获得巨刀"。
 
 ### 修改
+- **弹性纤维 (Elastic Fiber)**: 描述用句号和换行分隔两行文字
+- **凝固 (Solidify)**: 移除饥渴词条，格挡从30/40改为20/24
+- **刀山 (Blade Mountain)**: 移除保留关键字
+- **巨刀 (Great Blade)**: 移除保留关键字
 - **巨刀 (Great Blade)**: 描述使用 `{Damage:diff()}` 替代 `{Damage}`，正确显示升级高亮
 - **刀山能力 (BladeMountainPower)**: 堆叠类型从 Counter 改为 Single，描述更新
 - **小刀替换逻辑**: 简化 ShivCreateInHandPatch，使用 GreatBladeModifierPower 处理伤害减半

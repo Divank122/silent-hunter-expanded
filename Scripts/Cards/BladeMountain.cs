@@ -28,7 +28,7 @@ public class BladeMountain : SilentCardModel, ILocalizationProvider
         new PowerVar<BladeMountainPower>(1m)
     ];
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [

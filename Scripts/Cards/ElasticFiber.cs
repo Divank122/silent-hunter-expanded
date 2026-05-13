@@ -57,7 +57,7 @@ public class ElasticFiber : SilentCardModel, ILocalizationProvider
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("弹性纤维", "获得{PlayerPlating:diff()}层[gold]覆甲[/gold]，随机敌人获得{EnemyPlating:diff()}层[gold]覆甲[/gold]。"),
-        _ => new CardLoc("Elastic Fiber", "Gain {PlayerPlating:diff()} [gold]Plating[/gold]. A random enemy gains {EnemyPlating:diff()} [gold]Plating[/gold].")
+        "zhs" => new CardLoc("弹性纤维", "获得{PlayerPlating:diff()}层[gold]覆甲[/gold]。\n随机敌人获得{EnemyPlating:diff()}层[gold]覆甲[/gold]。"),
+        _ => new CardLoc("Elastic Fiber", "Gain {PlayerPlating:diff()} [gold]Plating[/gold].\nA random enemy gains {EnemyPlating:diff()} [gold]Plating[/gold].")
     };
 }

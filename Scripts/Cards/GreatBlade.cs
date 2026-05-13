@@ -37,7 +37,7 @@ public sealed class GreatBlade : SilentCardModel
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
-        new HashSet<CardKeyword> { CardKeyword.Exhaust, CardKeyword.Retain };
+        new HashSet<CardKeyword> { CardKeyword.Exhaust };
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
