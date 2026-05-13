@@ -33,9 +33,7 @@ public sealed class GreatBlade : SilentCardModel
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new DamageVar(16m, ValueProp.Move),
-        new CalculationBaseVar(0m),
-        new CalculationExtraVar(1m)
+        new DamageVar(16m, ValueProp.Move)
     ];
 
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
@@ -49,8 +47,8 @@ public sealed class GreatBlade : SilentCardModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new CardLoc("巨刀", "造成{Damage:diff()}点伤害。"),
-        _ => new CardLoc("Great Blade", "Deal {Damage:diff()} damage.")
+        "zhs" => new CardLoc("巨刀", "造成{Damage:diff()}点伤害。\n你的手牌中每有一张其他[gold]小刀[/gold]，这张牌的伤害减半一次。"),
+        _ => new CardLoc("Great Blade", "Deal {Damage:diff()} damage.\nFor each other [gold]Shiv[/gold] in your hand, this card's damage is halved.")
     };
 
     public GreatBlade() : base(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy)

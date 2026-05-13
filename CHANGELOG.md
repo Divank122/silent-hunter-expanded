@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### 重做
+- **巨刀 (Great Blade)**: 重做为0费攻击牌，造成16点伤害，手牌中每有一张其他小刀伤害减半一次。原效果为2费造成15点伤害。
+- **刀山 (Blade Mountain)**: 移除保留关键字，描述从"所有获得小刀的效果改为获得1张巨刀"改为"每当你获得小刀时，改为获得巨刀"。
+
+### 修改
+- **巨刀 (Great Blade)**: 描述使用 `{Damage:diff()}` 替代 `{Damage}`，正确显示升级高亮
+- **刀山能力 (BladeMountainPower)**: 堆叠类型从 Counter 改为 Single，描述更新
+- **小刀替换逻辑**: 简化 ShivCreateInHandPatch，使用 GreatBladeModifierPower 处理伤害减半
+
 ## [0.1.3] - 2026-05-13
 
 ### 平衡调整

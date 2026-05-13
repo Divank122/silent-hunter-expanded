@@ -15,7 +15,7 @@ namespace USCE.Scripts.Powers;
 public class BladeMountainPower : CustomPowerModel
 {
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter;
+    public override PowerStackType StackType => PowerStackType.Single;
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -29,8 +29,8 @@ public class BladeMountainPower : CustomPowerModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new PowerLoc("刀山", "所有获得小刀的效果改为获得1张巨刀。", "所有获得[gold]小刀[/gold]的效果改为获得[blue]{Amount}[/blue]张[gold]巨刀[/gold]。"),
-        _ => new PowerLoc("Blade Mountain", "All effects that create Shivs create 1 Great Blade instead.", "All effects that create [gold]Shivs[/gold] create [blue]{Amount}[/blue] [gold]Great Blades[/gold] instead.")
+        "zhs" => new PowerLoc("刀山", "每当你获得小刀时，改为获得巨刀。", "每当你获得[gold]小刀[/gold]时，改为获得[gold]巨刀[/gold]。"),
+        _ => new PowerLoc("Blade Mountain", "Whenever you gain a Shiv, gain a Great Blade instead.", "Whenever you gain a [gold]Shiv[/gold], gain a [gold]Great Blade[/gold] instead.")
     };
 
     public async Task<IEnumerable<CardModel>> CreateGreatBladesInstead(Player owner, int count)
@@ -47,7 +47,7 @@ public class BladeMountainPower : CustomPowerModel
 public class BladeMountainPowerPlus : CustomPowerModel
 {
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter;
+    public override PowerStackType StackType => PowerStackType.Single;
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [
@@ -61,8 +61,8 @@ public class BladeMountainPowerPlus : CustomPowerModel
 
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
-        "zhs" => new PowerLoc("刀山+", "所有获得小刀的效果改为获得1张巨刀+。", "所有获得[gold]小刀[/gold]的效果改为获得[blue]{Amount}[/blue]张[gold]巨刀+[/gold]。"),
-        _ => new PowerLoc("Blade Mountain+", "All effects that create Shivs create 1 Great Blade+ instead.", "All effects that create [gold]Shivs[/gold] create [blue]{Amount}[/blue] [gold]Great Blades+[/gold] instead.")
+        "zhs" => new PowerLoc("刀山+", "每当你获得小刀时，改为获得巨刀+。", "每当你获得[gold]小刀[/gold]时，改为获得[gold]巨刀+[/gold]。"),
+        _ => new PowerLoc("Blade Mountain+", "Whenever you gain a Shiv, gain a Great Blade+ instead.", "Whenever you gain a [gold]Shiv[/gold], gain a [gold]Great Blade+[/gold] instead.")
     };
 
     public async Task<IEnumerable<CardModel>> CreateGreatBladesInstead(Player owner, int count)
