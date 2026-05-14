@@ -8,12 +8,15 @@ using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Relics;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace USCE.Scripts.Cards;
@@ -52,10 +55,18 @@ public class Storm : SilentCardModel, ILocalizationProvider
         
         bool shouldTriggerFatal = cardPlay.Target.Powers.All(p => p.ShouldOwnerDeathTriggerFatal());
         
+        NGrandFinaleVfx nGrandFinaleVfx = NGrandFinaleVfx.Create(Owner.Creature);
+        if (nGrandFinaleVfx != null)
+        {
+            NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(nGrandFinaleVfx);
+            await Cmd.Wait(NGrandFinaleVfx.totalAnticipationDuration);
+        }
+        
         AttackCommand attackCommand = await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this)
             .Targeting(cardPlay.Target)
-            .WithHitFx("vfx/vfx_attack_slash")
+            .WithHitVfxNode(NGrandFinaleImpactVfx.Create)
+            .WithHitFx(null, null, "blunt_attack.mp3")
             .Execute(choiceContext);
         
         if (shouldTriggerFatal && attackCommand.Results.SelectMany(r => r).Any(r => r.WasTargetKilled))
