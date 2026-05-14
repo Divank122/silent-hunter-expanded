@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
-using Godot;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -62,12 +61,8 @@ public sealed class GreatBlade : SilentCardModel
         var attackCommand = DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this)
             .Targeting(cardPlay.Target)
-            .WithHitVfxNode((Creature t) => NShivThrowVfx.Create(Owner.Creature, t, Colors.Gold));
-
-        if (Owner.Character is Silent)
-        {
-            attackCommand.WithAttackerAnim("Shiv", 0.2f);
-        }
+            .WithHitVfxNode((Creature t) => NBigSlashVfx.Create(t))
+            .WithHitVfxNode((Creature t) => NBigSlashImpactVfx.Create(t));
 
         await attackCommand.Execute(choiceContext);
     }

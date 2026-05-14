@@ -10,9 +10,12 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace USCE.Scripts.Cards;
@@ -58,7 +61,13 @@ public class ChaosStrike : SilentCardModel
         int damage = (int)DynamicVars.Damage.BaseValue;
 
         await DamageCmd.Attack(damage).WithHitCount(2).FromCard(this).Targeting(cardPlay.Target)
-            .WithHitFx("vfx/vfx_attack_slash")
+            .WithAttackerFx(() => NDaggerSprayFlurryVfx.Create(Owner.Creature, new Color("#b1ccca"), goingRight: true))
+            .BeforeDamage(delegate
+            {
+                var child = NDaggerSprayImpactVfx.Create(cardPlay.Target, new Color("#b1ccca"), goingRight: true);
+                NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(child);
+                return Task.CompletedTask;
+            })
             .Execute(choiceContext);
 
         var cardToDiscard = await CardSelectCmd.FromHandForDiscard(choiceContext, Owner, new CardSelectorPrefs(CardSelectorPrefs.DiscardSelectionPrompt, 2), null, this);

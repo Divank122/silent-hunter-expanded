@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
+using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.ValueProps;
 using USCE.Scripts.Patches;
 
@@ -51,7 +55,13 @@ public class Puncture : SilentCardModel
         {
             int slyDamage = DynamicVars["SlyDamage"].IntValue;
             await DamageCmd.Attack(slyDamage).FromCard(this).Targeting(cardPlay.Target)
-                .WithHitFx("vfx/vfx_attack_slash")
+                .WithAttackerFx(() => NDaggerSprayFlurryVfx.Create(Owner.Creature, new Color("#b1ccca"), goingRight: true))
+                .BeforeDamage(delegate
+                {
+                    var child = NDaggerSprayImpactVfx.Create(cardPlay.Target, new Color("#b1ccca"), goingRight: true);
+                    NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(child);
+                    return Task.CompletedTask;
+                })
                 .Execute(choiceContext);
         }
         else
@@ -60,7 +70,13 @@ public class Puncture : SilentCardModel
             int repeat = DynamicVars.Repeat.IntValue;
 
             await DamageCmd.Attack(damage).WithHitCount(repeat).FromCard(this).Targeting(cardPlay.Target)
-                .WithHitFx("vfx/vfx_attack_slash")
+                .WithAttackerFx(() => NDaggerSprayFlurryVfx.Create(Owner.Creature, new Color("#b1ccca"), goingRight: true))
+                .BeforeDamage(delegate
+                {
+                    var child = NDaggerSprayImpactVfx.Create(cardPlay.Target, new Color("#b1ccca"), goingRight: true);
+                    NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(child);
+                    return Task.CompletedTask;
+                })
                 .Execute(choiceContext);
         }
     }

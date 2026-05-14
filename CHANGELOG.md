@@ -1,5 +1,14 @@
 # 更新日志
 
+## [0.2.1] - 2026-05-14
+
+### 特效替换
+- **混乱打击 (Chaos Strike)**: 攻击特效替换为匕首雨（Dagger Spray）
+- **扎透 (Puncture)**: 攻击特效替换为匕首雨（Dagger Spray）
+- **迷惑冲击 (Confusing Impact)**: 攻击特效替换为致命毒药（Deadly Poison）
+- **针锋相对 (Counterstrike)**: 攻击特效替换为完美打击（Perfected Strike）
+- **巨刀 (Great Blade)**: 攻击特效替换为完美打击（Perfected Strike）
+
 ## [0.2.0] - 2026-05-14
 
 ### 新增

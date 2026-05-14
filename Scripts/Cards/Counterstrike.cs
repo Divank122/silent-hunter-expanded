@@ -11,6 +11,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace USCE.Scripts.Cards;
@@ -58,7 +59,8 @@ public class Counterstrike : SilentCardModel, ILocalizationProvider
         int hitCount = cardPlay.Target.Monster?.IntendsToAttack == true ? 3 : 1;
 
         await DamageCmd.Attack(damage).WithHitCount(hitCount).FromCard(this).Targeting(cardPlay.Target)
-            .WithHitFx("vfx/vfx_attack_slash")
+            .WithHitVfxNode((Creature t) => NBigSlashVfx.Create(t))
+            .WithHitVfxNode((Creature t) => NBigSlashImpactVfx.Create(t))
             .Execute(choiceContext);
     }
 
