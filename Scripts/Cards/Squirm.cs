@@ -5,11 +5,14 @@ using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace USCE.Scripts.Cards;
@@ -35,6 +38,8 @@ public class Squirm : SilentCardModel
         HoverTipFactory.FromPower<PoisonPower>()
     ];
 
+    protected override IEnumerable<string> ExtraRunAssetPaths => NSmokePuffVfx.AssetPaths;
+
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
         "zhs" => new CardLoc("蠕动", "获得{Block:diff()}点[gold]格挡[/gold]。\n给予{PoisonAmount:diff()}层[gold]中毒[/gold]。"),
@@ -51,6 +56,9 @@ public class Squirm : SilentCardModel
 
         if (cardPlay.Target != null)
         {
+            NPoisonImpactVfx child = NPoisonImpactVfx.Create(cardPlay.Target);
+            NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(child);
+
             int poisonAmount = DynamicVars["PoisonAmount"].IntValue;
             await PowerCmd.Apply<PoisonPower>(cardPlay.Target, poisonAmount, Owner.Creature, this);
         }

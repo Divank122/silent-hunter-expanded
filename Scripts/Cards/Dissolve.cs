@@ -2,15 +2,20 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
+using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Nodes.Combat;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace USCE.Scripts.Cards;
@@ -33,6 +38,8 @@ public class Dissolve : SilentCardModel
         HoverTipFactory.FromPower<PoisonPower>()
     ];
 
+    protected override IEnumerable<string> ExtraRunAssetPaths => NSmokePuffVfx.AssetPaths;
+
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
         "zhs" => new CardLoc("消解", "给予{PoisonAmount:diff()}层[gold]中毒[/gold]。\n每当你弃牌时，将这张牌放入你的[gold]手牌[/gold]。"),
@@ -47,6 +54,13 @@ public class Dissolve : SilentCardModel
     {
         if (cardPlay.Target != null)
         {
+            NCreature nCreature = NCombatRoom.Instance?.GetCreatureNode(cardPlay.Target);
+            if (nCreature != null)
+            {
+                NGaseousImpactVfx child = NGaseousImpactVfx.Create(nCreature.VfxSpawnPosition, new Color("83eb85"));
+                NCombatRoom.Instance.CombatVfxContainer.AddChildSafely(child);
+            }
+
             int poisonAmount = DynamicVars["PoisonAmount"].IntValue;
             await PowerCmd.Apply<PoisonPower>(cardPlay.Target, poisonAmount, Owner.Creature, this);
         }

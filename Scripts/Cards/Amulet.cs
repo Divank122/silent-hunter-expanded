@@ -3,15 +3,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
+using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Nodes.Combat;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MegaCrit.Sts2.Core.Nodes.Vfx;
 
 namespace USCE.Scripts.Cards;
 
@@ -47,6 +53,8 @@ public class Amulet : SilentCardModel
         EnergyHoverTip
     ];
 
+    protected override IEnumerable<string> ExtraRunAssetPaths => NSmokePuffVfx.AssetPaths;
+
     public override List<(string, string)>? Localization => LocManager.Instance.Language switch
     {
         "zhs" => new CardLoc("护符", "获得{IfUpgraded:show:{energyPrefix:energyIcons(2)}|{energyPrefix:energyIcons(1)}}。\n如果敌方拥有[gold]中毒[/gold]，使其失去{PoisonLoss:diff()}层[gold]中毒[/gold]，额外获得{energyPrefix:energyIcons(1)}。"),
@@ -67,6 +75,13 @@ public class Amulet : SilentCardModel
 
         if (cardPlay.Target != null)
         {
+            NCreature nCreature = NCombatRoom.Instance?.GetCreatureNode(cardPlay.Target);
+            if (nCreature != null)
+            {
+                NGaseousImpactVfx child = NGaseousImpactVfx.Create(nCreature.VfxSpawnPosition, new Color("83eb85"));
+                NCombatRoom.Instance.CombatVfxContainer.AddChildSafely(child);
+            }
+
             var poisonPower = cardPlay.Target.GetPower<PoisonPower>();
             if (poisonPower != null && poisonPower.Amount > 0)
             {

@@ -6,8 +6,11 @@
 - **混乱打击 (Chaos Strike)**: 攻击特效替换为匕首雨（Dagger Spray）
 - **扎透 (Puncture)**: 攻击特效替换为匕首雨（Dagger Spray）
 - **迷惑冲击 (Confusing Impact)**: 攻击特效替换为致命毒药（Deadly Poison）
+- **蠕动 (Squirm)**: 技能特效替换为致命毒药（Deadly Poison）
 - **针锋相对 (Counterstrike)**: 攻击特效替换为完美打击（Perfected Strike）
 - **巨刀 (Great Blade)**: 攻击特效替换为完美打击（Perfected Strike）
+- **消解 (Dissolve)**: 技能特效替换为咕嘟冒泡（Smoke Puff）
+- **护符 (Amulet)**: 技能特效替换为咕嘟冒泡（Smoke Puff），与消解一致
 
 ## [0.2.0] - 2026-05-14
 
