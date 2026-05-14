@@ -2,15 +2,9 @@
 
 ## [0.2.1] - 2026-05-14
 
-### 特效替换
-- **混乱打击 (Chaos Strike)**: 攻击特效替换为匕首雨（Dagger Spray）
-- **扎透 (Puncture)**: 攻击特效替换为匕首雨（Dagger Spray）
-- **迷惑冲击 (Confusing Impact)**: 攻击特效替换为致命毒药（Deadly Poison）
-- **蠕动 (Squirm)**: 技能特效替换为致命毒药（Deadly Poison）
-- **针锋相对 (Counterstrike)**: 攻击特效替换为完美打击（Perfected Strike）
-- **巨刀 (Great Blade)**: 攻击特效替换为完美打击（Perfected Strike）
-- **消解 (Dissolve)**: 技能特效替换为咕嘟冒泡（Smoke Puff）
-- **护符 (Amulet)**: 技能特效替换为咕嘟冒泡（Smoke Puff），与消解一致
+
+### 修复
+- **穷追不舍 (Relentless Pursuit)**: 修复升级后描述不更新和图标未正确显示层数的问题。
 
 ## [0.2.0] - 2026-05-14
 
@@ -29,6 +23,16 @@
 - **巨刀 (Great Blade)**: 描述使用 `{Damage:diff()}` 替代 `{Damage}`，正确显示升级高亮
 - **刀山能力 (BladeMountainPower)**: 堆叠类型从 Counter 改为 Single，描述更新
 - **小刀替换逻辑**: 简化 ShivCreateInHandPatch，使用 GreatBladeModifierPower 处理伤害减半
+
+### 特效替换
+- **混乱打击 (Chaos Strike)**: 攻击特效替换为匕首雨
+- **扎透 (Puncture)**: 攻击特效替换为匕首雨
+- **迷惑冲击 (Confusing Impact)**: 攻击特效替换为致命毒药
+- **蠕动 (Squirm)**: 技能特效替换为致命毒药
+- **针锋相对 (Counterstrike)**: 攻击特效替换为完美打击
+- **巨刀 (Great Blade)**: 攻击特效替换为完美打击
+- **消解 (Dissolve)**: 技能特效替换为咕嘟冒泡
+- **护符 (Amulet)**: 技能特效替换为咕嘟冒泡，与消解一致
 
 ## [Unreleased]
 

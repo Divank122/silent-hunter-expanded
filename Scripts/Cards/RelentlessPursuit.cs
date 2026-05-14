@@ -39,17 +39,11 @@ public class RelentlessPursuit : SilentCardModel, ILocalizationProvider
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
-        if (IsUpgraded)
-        {
-            await PowerCmd.Apply<RelentlessPursuitPowerPlus>(Owner.Creature, 6m, Owner.Creature, this);
-        }
-        else
-        {
-            await PowerCmd.Apply<RelentlessPursuitPower>(Owner.Creature, 4m, Owner.Creature, this);
-        }
+        await PowerCmd.Apply<RelentlessPursuitPower>(Owner.Creature, DynamicVars["RelentlessPursuitPower"].BaseValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
+        DynamicVars["RelentlessPursuitPower"].UpgradeValueBy(2m);
     }
 }
