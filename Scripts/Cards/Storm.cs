@@ -58,7 +58,7 @@ public class Storm : SilentCardModel, ILocalizationProvider
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
         
-        if (shouldTriggerFatal && attackCommand.Results.Any(r => r.WasTargetKilled))
+        if (shouldTriggerFatal && attackCommand.Results.SelectMany(r => r).Any(r => r.WasTargetKilled))
         {
             await RelicCmd.Obtain<OddlySmoothStone>(Owner);
         }

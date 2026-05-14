@@ -48,7 +48,7 @@ public class SpiderWeb : SilentCardModel, ILocalizationProvider
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
-        await PowerCmd.Apply<SpiderWebPower>(Owner.Creature, DynamicVars["SpiderWebPower"].IntValue, Owner.Creature, this);
+        await PowerCmd.Apply<SpiderWebPower>(choiceContext, Owner.Creature, DynamicVars["SpiderWebPower"].IntValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

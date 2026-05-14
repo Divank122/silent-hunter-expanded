@@ -37,7 +37,7 @@ public class ElasticFiber : SilentCardModel, ILocalizationProvider
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<PlatingPower>(Owner.Creature, DynamicVars["PlayerPlating"].IntValue, Owner.Creature, this);
+        await PowerCmd.Apply<PlatingPower>(choiceContext, Owner.Creature, DynamicVars["PlayerPlating"].IntValue, Owner.Creature, this);
 
         var enemies = CombatState!.HittableEnemies;
         if (enemies.Count > 0)
@@ -45,7 +45,7 @@ public class ElasticFiber : SilentCardModel, ILocalizationProvider
             Creature? randomEnemy = Owner.RunState.Rng.CombatTargets.NextItem(enemies);
             if (randomEnemy != null)
             {
-                await PowerCmd.Apply<PlatingPower>(randomEnemy, DynamicVars["EnemyPlating"].IntValue, Owner.Creature, this);
+                await PowerCmd.Apply<PlatingPower>(choiceContext, randomEnemy, DynamicVars["EnemyPlating"].IntValue, Owner.Creature, this);
             }
         }
     }

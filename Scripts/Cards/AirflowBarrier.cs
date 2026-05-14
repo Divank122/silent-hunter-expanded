@@ -39,7 +39,7 @@ public class AirflowBarrier : SilentCardModel, ILocalizationProvider
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
-        await PowerCmd.Apply<AirflowBarrierPower>(Owner.Creature, DynamicVars["BlockAmount"].BaseValue, Owner.Creature, this);
+        await PowerCmd.Apply<AirflowBarrierPower>(choiceContext, Owner.Creature, DynamicVars["BlockAmount"].BaseValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

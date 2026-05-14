@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -27,7 +28,7 @@ public class HeartPiercerPower : CustomPowerModel
         _ => new PowerLoc("Heart Piercer", "Shivs deal additional 1 Poison.", "Shivs deal additional [blue]{Amount}[/blue] [gold]Poison[/gold].")
     };
 
-    public override async Task AfterAttack(AttackCommand command)
+    public override async Task AfterAttack(PlayerChoiceContext choiceContext, AttackCommand command)
     {
         if (command.Attacker != Owner || command.TargetSide == Owner.Side)
         {
@@ -44,11 +45,14 @@ public class HeartPiercerPower : CustomPowerModel
             return;
         }
 
-        foreach (DamageResult result in command.Results)
+        foreach (List<DamageResult> resultList in command.Results)
         {
-            if (result.TotalDamage > 0 && !result.Receiver.IsDead)
+            foreach (DamageResult result in resultList)
             {
-                await PowerCmd.Apply<PoisonPower>(result.Receiver, Amount, Owner, null);
+                if (result.TotalDamage > 0 && !result.Receiver.IsDead)
+                {
+                    await PowerCmd.Apply<PoisonPower>(choiceContext, result.Receiver, Amount, Owner, null);
+                }
             }
         }
 

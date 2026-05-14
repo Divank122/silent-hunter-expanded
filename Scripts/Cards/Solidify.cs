@@ -43,7 +43,7 @@ public class Solidify : SilentCardModel, ILocalizationProvider
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
-        await PowerCmd.Apply<DexterityPower>(Owner.Creature, DynamicVars["DexterityLoss"].IntValue, Owner.Creature, this);
+        await PowerCmd.Apply<DexterityPower>(choiceContext, Owner.Creature, DynamicVars["DexterityLoss"].IntValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

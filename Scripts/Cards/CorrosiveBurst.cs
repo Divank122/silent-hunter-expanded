@@ -45,7 +45,7 @@ public class CorrosiveBurst : SilentCardModel, ILocalizationProvider
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
-        await PowerCmd.Apply<CorrosiveBurstPower>(Owner.Creature, DynamicVars["CorrosiveBurstPower"].IntValue, Owner.Creature, this);
+        await PowerCmd.Apply<CorrosiveBurstPower>(choiceContext, Owner.Creature, DynamicVars["CorrosiveBurstPower"].IntValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

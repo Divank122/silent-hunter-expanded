@@ -57,7 +57,7 @@ public class ConfusingImpact : SilentCardModel
         var poisonVfx = NPoisonImpactVfx.Create(cardPlay.Target);
         NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(poisonVfx);
 
-        await PowerCmd.Apply<PoisonPower>(cardPlay.Target, DynamicVars.Poison.IntValue, Owner.Creature, this);
+        await PowerCmd.Apply<PoisonPower>(choiceContext, cardPlay.Target, DynamicVars.Poison.IntValue, Owner.Creature, this);
 
         var monster = cardPlay.Target.Monster;
         if (monster != null && !cardPlay.Target.IsDead)

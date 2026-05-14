@@ -52,11 +52,11 @@ public class BladeMountain : SilentCardModel, ILocalizationProvider
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         if (IsUpgraded)
         {
-            await PowerCmd.Apply<BladeMountainPowerPlus>(Owner.Creature, 1m, Owner.Creature, this);
+            await PowerCmd.Apply<BladeMountainPowerPlus>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
         }
         else
         {
-            await PowerCmd.Apply<BladeMountainPower>(Owner.Creature, 1m, Owner.Creature, this);
+            await PowerCmd.Apply<BladeMountainPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
         }
     }
 

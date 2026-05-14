@@ -29,7 +29,7 @@ public class Calculated : SilentCardModel, ILocalizationProvider
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
-        await PowerCmd.Apply<CalculatedPower>(Owner.Creature, DynamicVars.Damage.BaseValue, Owner.Creature, this);
+        await PowerCmd.Apply<CalculatedPower>(choiceContext, Owner.Creature, DynamicVars.Damage.BaseValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

@@ -38,7 +38,7 @@ public class QuickSort : SilentCardModel, ILocalizationProvider
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.IntValue, Owner);
-        await PowerCmd.Apply<FreeSlyPower>(Owner.Creature, 1m, Owner.Creature, this);
+        await PowerCmd.Apply<FreeSlyPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

@@ -48,7 +48,7 @@ public class HeartPiercer : SilentCardModel, ILocalizationProvider
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
-        await PowerCmd.Apply<HeartPiercerPower>(Owner.Creature, DynamicVars["HeartPiercerPower"].IntValue, Owner.Creature, this);
+        await PowerCmd.Apply<HeartPiercerPower>(choiceContext, Owner.Creature, DynamicVars["HeartPiercerPower"].IntValue, Owner.Creature, this);
 
         int shivCount = DynamicVars["ShivCount"].IntValue;
         for (int i = 0; i < shivCount; i++)

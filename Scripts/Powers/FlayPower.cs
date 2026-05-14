@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
@@ -34,12 +35,12 @@ public class FlayPower : CustomPowerModel
         _ => new PowerLoc("Flay", "Whenever you apply Poison to an enemy, apply 1 Weak.", "Whenever you apply [gold]Poison[/gold] to an enemy, apply [blue]{Amount}[/blue] [gold]Weak[/gold].")
     };
 
-    public override async Task AfterPowerAmountChanged(PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
+    public override async Task AfterPowerAmountChanged(PlayerChoiceContext choiceContext, PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
     {
         if (applier == Owner && amount > 0m && power is PoisonPower && power.Owner.Side != Owner.Side)
         {
             Flash();
-            await PowerCmd.Apply<WeakPower>(power.Owner, Amount, Owner, null);
+            await PowerCmd.Apply<WeakPower>(choiceContext, power.Owner, Amount, Owner, null);
         }
     }
 }

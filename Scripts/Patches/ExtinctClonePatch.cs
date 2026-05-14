@@ -146,7 +146,7 @@ public static class ExtinctAdaptiveStrikePatch
         if (cardModel != null)
         {
             cardModel.EnergyCost.SetThisCombat(0);
-            CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(cardModel, PileType.Discard, addedByPlayer: true), 1.5f);
+            CardCmd.PreviewCardPileAdd(await CardPileCmd.AddGeneratedCardToCombat(cardModel, PileType.Discard, instance.Owner), 1.5f);
         }
     }
 }
@@ -154,9 +154,9 @@ public static class ExtinctAdaptiveStrikePatch
 [HarmonyPatch(typeof(HistoryCourse))]
 public static class ExtinctHistoryCoursePatch
 {
-    [HarmonyPatch(nameof(HistoryCourse.BeforePlayPhaseStart))]
+    [HarmonyPatch(nameof(HistoryCourse.AfterAutoPrePlayPhaseEntered))]
     [HarmonyPrefix]
-    public static bool BeforePlayPhaseStartPrefix(HistoryCourse __instance, PlayerChoiceContext choiceContext, Player player, ref Task? __result)
+    public static bool AfterAutoPrePlayPhaseEnteredPrefix(HistoryCourse __instance, PlayerChoiceContext choiceContext, Player player, ref Task? __result)
     {
         if (player != __instance.Owner)
         {
@@ -203,7 +203,7 @@ public static class ExtinctNightmarePatch
 
     [HarmonyPatch(nameof(NightmarePower.BeforeHandDraw))]
     [HarmonyPrefix]
-    public static bool BeforeHandDrawPrefix(NightmarePower __instance, Player player, PlayerChoiceContext choiceContext, CombatState combatState, ref Task __result)
+    public static bool BeforeHandDrawPrefix(NightmarePower __instance, Player player, PlayerChoiceContext choiceContext, ICombatState combatState, ref Task __result)
     {
         if (player != __instance.Owner.Player)
         {
@@ -292,7 +292,7 @@ public static class ExtinctDualWieldPatch
                 var card = selection.CreateClone();
                 if (card != null)
                 {
-                    await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, addedByPlayer: true);
+                    await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, instance.Owner);
                 }
             }
         }

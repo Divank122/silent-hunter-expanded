@@ -25,7 +25,7 @@ public static class ThirstyTrackerPatch
             var owner = cardPlay.Card.Owner;
             if (owner != null && owner.Creature.GetPower<ThirstyPower>() == null)
             {
-                PowerCmd.Apply<ThirstyPower>(owner.Creature, 1, null, null).GetAwaiter().GetResult();
+                PowerCmd.Apply<ThirstyPower>(new ThrowingPlayerChoiceContext(), owner.Creature, 1, null, null).GetAwaiter().GetResult();
             }
         }
     }

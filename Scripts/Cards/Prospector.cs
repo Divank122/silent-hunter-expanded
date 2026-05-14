@@ -69,7 +69,7 @@ public class Prospector : SilentCardModel
                     Creature? randomEnemy = Owner.RunState.Rng.CombatTargets.NextItem(enemies);
                     if (randomEnemy != null)
                     {
-                        await PowerCmd.Apply<PoisonPower>(randomEnemy, poisonAmount, Owner.Creature, this);
+                        await PowerCmd.Apply<PoisonPower>(choiceContext, randomEnemy, poisonAmount, Owner.Creature, this);
                     }
                 }
             }

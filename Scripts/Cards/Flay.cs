@@ -49,7 +49,7 @@ public class Flay : SilentCardModel, ILocalizationProvider
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
-        await PowerCmd.Apply<FlayPower>(Owner.Creature, DynamicVars["FlayPower"].IntValue, Owner.Creature, this);
+        await PowerCmd.Apply<FlayPower>(choiceContext, Owner.Creature, DynamicVars["FlayPower"].IntValue, Owner.Creature, this);
 
         if (IsUpgraded)
         {
@@ -58,7 +58,7 @@ public class Flay : SilentCardModel, ILocalizationProvider
             {
                 var random = new System.Random();
                 var randomEnemy = enemies[random.Next(enemies.Count)];
-                await PowerCmd.Apply<PoisonPower>(randomEnemy, DynamicVars["PoisonAmount"].IntValue, Owner.Creature, this);
+                await PowerCmd.Apply<PoisonPower>(choiceContext, randomEnemy, DynamicVars["PoisonAmount"].IntValue, Owner.Creature, this);
             }
         }
     }

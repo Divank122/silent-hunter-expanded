@@ -35,7 +35,7 @@ public class SpiderWebPower : CustomPowerModel
         _ => new PowerLoc("Spider Web", "This turn, whenever you attack an enemy, apply 1 Weak and 1 Vulnerable.", "This turn, whenever you attack an enemy, apply [blue]{Amount}[/blue] [gold]Weak[/gold] and [blue]{Amount}[/blue] [gold]Vulnerable[/gold].")
     };
 
-    public override async Task AfterAttack(AttackCommand command)
+    public override async Task AfterAttack(PlayerChoiceContext choiceContext, AttackCommand command)
     {
         if (command.Attacker != Owner || command.TargetSide == Owner.Side)
         {
@@ -47,12 +47,15 @@ public class SpiderWebPower : CustomPowerModel
             return;
         }
 
-        foreach (DamageResult result in command.Results)
+        foreach (List<DamageResult> resultList in command.Results)
         {
-            if (result.TotalDamage > 0 && !result.Receiver.IsDead)
+            foreach (DamageResult result in resultList)
             {
-                await PowerCmd.Apply<WeakPower>(result.Receiver, Amount, Owner, null);
-                await PowerCmd.Apply<VulnerablePower>(result.Receiver, Amount, Owner, null);
+                if (result.TotalDamage > 0 && !result.Receiver.IsDead)
+                {
+                    await PowerCmd.Apply<WeakPower>(choiceContext, result.Receiver, Amount, Owner, null);
+                    await PowerCmd.Apply<VulnerablePower>(choiceContext, result.Receiver, Amount, Owner, null);
+                }
             }
         }
 

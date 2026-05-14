@@ -60,7 +60,7 @@ public class Squirm : SilentCardModel
             NCombatRoom.Instance?.CombatVfxContainer.AddChildSafely(child);
 
             int poisonAmount = DynamicVars["PoisonAmount"].IntValue;
-            await PowerCmd.Apply<PoisonPower>(cardPlay.Target, poisonAmount, Owner.Creature, this);
+            await PowerCmd.Apply<PoisonPower>(choiceContext, cardPlay.Target, poisonAmount, Owner.Creature, this);
         }
     }
 

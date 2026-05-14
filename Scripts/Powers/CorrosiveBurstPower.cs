@@ -28,7 +28,7 @@ public class CorrosiveBurstPower : CustomPowerModel
         _ => new PowerLoc("Corrosive Burst", "Whenever you apply Poison to an enemy, they take 26 damage.", "Whenever you apply [gold]Poison[/gold] to an enemy, they take [blue]{Amount}[/blue] damage.")
     };
 
-    public override async Task AfterPowerAmountChanged(PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
+    public override async Task AfterPowerAmountChanged(PlayerChoiceContext choiceContext, PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
     {
         if (applier == Owner && amount > 0m && power is PoisonPower && power.Owner.Side != Owner.Side)
         {

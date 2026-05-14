@@ -41,11 +41,11 @@ public class RelentlessPursuit : SilentCardModel, ILocalizationProvider
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         if (IsUpgraded)
         {
-            await PowerCmd.Apply<RelentlessPursuitPowerPlus>(Owner.Creature, 6m, Owner.Creature, this);
+            await PowerCmd.Apply<RelentlessPursuitPowerPlus>(choiceContext, Owner.Creature, 6m, Owner.Creature, this);
         }
         else
         {
-            await PowerCmd.Apply<RelentlessPursuitPower>(Owner.Creature, 4m, Owner.Creature, this);
+            await PowerCmd.Apply<RelentlessPursuitPower>(choiceContext, Owner.Creature, 4m, Owner.Creature, this);
         }
     }
 

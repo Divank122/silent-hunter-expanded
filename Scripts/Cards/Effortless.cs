@@ -30,11 +30,11 @@ public class Effortless : SilentCardModel, ILocalizationProvider
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         if (IsUpgraded)
         {
-            await PowerCmd.Apply<EffortlessPowerPlus>(Owner.Creature, 1m, Owner.Creature, this);
+            await PowerCmd.Apply<EffortlessPowerPlus>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
         }
         else
         {
-            await PowerCmd.Apply<EffortlessPower>(Owner.Creature, 1m, Owner.Creature, this);
+            await PowerCmd.Apply<EffortlessPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
         }
     }
 

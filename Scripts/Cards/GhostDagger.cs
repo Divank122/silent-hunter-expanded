@@ -79,11 +79,11 @@ public class GhostDagger : SilentCardModel, ILocalizationProvider
         {
             if (IsUpgraded)
             {
-                await PowerCmd.Apply<GhostDaggerPowerPlus>(Owner.Creature, 1m, Owner.Creature, this);
+                await PowerCmd.Apply<GhostDaggerPowerPlus>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
             }
             else
             {
-                await PowerCmd.Apply<GhostDaggerPower>(Owner.Creature, 1m, Owner.Creature, this);
+                await PowerCmd.Apply<GhostDaggerPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
             }
         }
     }
@@ -93,7 +93,7 @@ public class GhostDagger : SilentCardModel, ILocalizationProvider
         DynamicVars.Damage.UpgradeValueBy(3m);
     }
 
-    public static async Task<IEnumerable<CardModel>> CreateInHand(Player owner, int count, CombatState combatState)
+    public static async Task<IEnumerable<CardModel>> CreateInHand(Player owner, int count, ICombatState combatState)
     {
         if (count == 0) return Array.Empty<CardModel>();
         if (CombatManager.Instance.IsOverOrEnding) return Array.Empty<CardModel>();
@@ -103,7 +103,7 @@ public class GhostDagger : SilentCardModel, ILocalizationProvider
         {
             daggers.Add(combatState.CreateCard<GhostDagger>(owner));
         }
-        await CardPileCmd.AddGeneratedCardsToCombat(daggers, PileType.Hand, addedByPlayer: true);
+        await CardPileCmd.AddGeneratedCardsToCombat(daggers, PileType.Hand, owner);
         return daggers;
     }
 }

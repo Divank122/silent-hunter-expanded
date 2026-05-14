@@ -9,6 +9,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
@@ -59,9 +60,9 @@ public static class ShivCreateInHandPatches
         return creature.GetPower<BladeMountainPowerPlus>() != null;
     }
 
-    [HarmonyPatch(nameof(Shiv.CreateInHand), typeof(Player), typeof(CombatState))]
+    [HarmonyPatch(nameof(Shiv.CreateInHand), typeof(Player), typeof(ICombatState))]
     [HarmonyPrefix]
-    public static bool PrefixSingle(Player owner, CombatState combatState, ref Task<CardModel?> __result)
+    public static bool PrefixSingle(Player owner, ICombatState combatState, ref Task<CardModel?> __result)
     {
         if (owner == null || combatState == null)
         {
@@ -90,9 +91,9 @@ public static class ShivCreateInHandPatches
         return false;
     }
 
-    [HarmonyPatch(nameof(Shiv.CreateInHand), typeof(Player), typeof(int), typeof(CombatState))]
+    [HarmonyPatch(nameof(Shiv.CreateInHand), typeof(Player), typeof(int), typeof(ICombatState))]
     [HarmonyPrefix]
-    public static bool PrefixMultiple(Player owner, int count, CombatState combatState, ref Task<IEnumerable<CardModel>> __result)
+    public static bool PrefixMultiple(Player owner, int count, ICombatState combatState, ref Task<IEnumerable<CardModel>> __result)
     {
         if (owner == null || combatState == null)
         {
@@ -121,7 +122,7 @@ public static class ShivCreateInHandPatches
         return false;
     }
 
-    private static async Task<CardModel?> CreateGreatBlade(Player owner, CombatState combatState)
+    private static async Task<CardModel?> CreateGreatBlade(Player owner, ICombatState combatState)
     {
         if (HasBladeMountainPlus(owner.Creature))
         {
@@ -136,7 +137,7 @@ public static class ShivCreateInHandPatches
         return await GreatBlade.CreateInHand(owner, combatState);
     }
 
-    private static async Task<IEnumerable<CardModel>> CreateGreatBlades(Player owner, int count, CombatState combatState)
+    private static async Task<IEnumerable<CardModel>> CreateGreatBlades(Player owner, int count, ICombatState combatState)
     {
         List<CardModel> result = new List<CardModel>();
         bool upgradeBlades = HasBladeMountainPlus(owner.Creature);
@@ -204,7 +205,7 @@ public static class ShivCombatPatch
             if (existingPower == null)
             {
                 GD.Print("[ShivCombatPatch] Applying GreatBladeModifierPower...");
-                await PowerCmd.Apply<GreatBladeModifierPower>(playerCreature, 1m, null, null);
+                await PowerCmd.Apply<GreatBladeModifierPower>(new ThrowingPlayerChoiceContext(), playerCreature, 1m, null, null);
                 GD.Print("[ShivCombatPatch] GreatBladeModifierPower applied");
             }
         }

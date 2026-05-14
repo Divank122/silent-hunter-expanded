@@ -47,7 +47,7 @@ public class Clot : SilentCardModel, ILocalizationProvider
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
-        await PowerCmd.Apply<ClotPower>(Owner.Creature, DynamicVars["ClotPower"].IntValue, Owner.Creature, this);
+        await PowerCmd.Apply<ClotPower>(choiceContext, Owner.Creature, DynamicVars["ClotPower"].IntValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

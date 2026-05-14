@@ -62,7 +62,7 @@ public class Dissolve : SilentCardModel
             }
 
             int poisonAmount = DynamicVars["PoisonAmount"].IntValue;
-            await PowerCmd.Apply<PoisonPower>(cardPlay.Target, poisonAmount, Owner.Creature, this);
+            await PowerCmd.Apply<PoisonPower>(choiceContext, cardPlay.Target, poisonAmount, Owner.Creature, this);
         }
     }
 

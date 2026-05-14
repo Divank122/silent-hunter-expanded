@@ -38,8 +38,8 @@ public class EagleEyeVision : SilentCardModel, ILocalizationProvider
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
-        await PowerCmd.Apply<AccuracyPower>(Owner.Creature, DynamicVars["AccuracyAmount"].BaseValue, Owner.Creature, this);
-        await PowerCmd.Apply<EagleEyeVisionPower>(Owner.Creature, 1m, Owner.Creature, this);
+        await PowerCmd.Apply<AccuracyPower>(choiceContext, Owner.Creature, DynamicVars["AccuracyAmount"].BaseValue, Owner.Creature, this);
+        await PowerCmd.Apply<EagleEyeVisionPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()

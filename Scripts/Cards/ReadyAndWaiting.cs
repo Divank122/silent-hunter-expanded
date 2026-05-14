@@ -32,11 +32,11 @@ public class ReadyAndWaiting : SilentCardModel, ILocalizationProvider
         await CreatureCmd.TriggerAnim(Owner.Creature, "Cast", Owner.Character.CastAnimDelay);
         if (IsUpgraded)
         {
-            await PowerCmd.Apply<ReadyAndWaitingPowerPlus>(Owner.Creature, 1m, Owner.Creature, this);
+            await PowerCmd.Apply<ReadyAndWaitingPowerPlus>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
         }
         else
         {
-            await PowerCmd.Apply<ReadyAndWaitingPower>(Owner.Creature, 1m, Owner.Creature, this);
+            await PowerCmd.Apply<ReadyAndWaitingPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
         }
     }
 

@@ -31,7 +31,7 @@ public class GhostDaggerPower : CustomPowerModel
         _ => new PowerLoc("Ghost Dagger", "Next turn, add 1 Ghost Dagger to your hand.", "Next turn, add [blue]{Amount}[/blue] [gold]Ghost Daggers[/gold] to your [gold]hand[/gold].")
     };
 
-    public override async Task BeforeHandDraw(Player player, PlayerChoiceContext choiceContext, CombatState combatState)
+    public override async Task BeforeHandDraw(Player player, PlayerChoiceContext choiceContext, ICombatState combatState)
     {
         if (player == Owner?.Player && AmountOnTurnStart > 0)
         {
@@ -61,7 +61,7 @@ public class GhostDaggerPowerPlus : CustomPowerModel
         _ => new PowerLoc("Ghost Dagger+", "Next turn, add 1 Ghost Dagger+ to your hand.", "Next turn, add [blue]{Amount}[/blue] [gold]Ghost Daggers+[/gold] to your [gold]hand[/gold].")
     };
 
-    public override async Task BeforeHandDraw(Player player, PlayerChoiceContext choiceContext, CombatState combatState)
+    public override async Task BeforeHandDraw(Player player, PlayerChoiceContext choiceContext, ICombatState combatState)
     {
         if (player == Owner?.Player && AmountOnTurnStart > 0)
         {

@@ -72,12 +72,12 @@ public sealed class GreatBlade : SilentCardModel
         DynamicVars.Damage.UpgradeValueBy(4m);
     }
 
-    public static async Task<CardModel?> CreateInHand(Player owner, CombatState combatState)
+    public static async Task<CardModel?> CreateInHand(Player owner, ICombatState combatState)
     {
         return (await CreateInHand(owner, 1, combatState)).FirstOrDefault();
     }
 
-    public static async Task<IEnumerable<CardModel>> CreateInHand(Player owner, int count, CombatState combatState)
+    public static async Task<IEnumerable<CardModel>> CreateInHand(Player owner, int count, ICombatState combatState)
     {
         if (count == 0)
         {
@@ -93,7 +93,7 @@ public sealed class GreatBlade : SilentCardModel
         {
             blades.Add(combatState.CreateCard<GreatBlade>(owner));
         }
-        await CardPileCmd.AddGeneratedCardsToCombat(blades, PileType.Hand, addedByPlayer: true);
+        await CardPileCmd.AddGeneratedCardsToCombat(blades, PileType.Hand, owner);
         return blades;
     }
 }

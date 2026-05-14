@@ -53,9 +53,9 @@ public class Bane : SilentCardModel, ILocalizationProvider
         int poisonAmount = DynamicVars["PoisonPower"].IntValue;
         int poisonLoss = DynamicVars["PoisonLoss"].IntValue;
 
-        await PowerCmd.Apply<IntangiblePower>(Owner.Creature, intangibleAmount, Owner.Creature, this);
-        await PowerCmd.Apply<PoisonPower>(Owner.Creature, poisonAmount, Owner.Creature, this);
-        await PowerCmd.Apply<BanePower>(Owner.Creature, poisonLoss, Owner.Creature, this);
+        await PowerCmd.Apply<IntangiblePower>(choiceContext, Owner.Creature, intangibleAmount, Owner.Creature, this);
+        await PowerCmd.Apply<PoisonPower>(choiceContext, Owner.Creature, poisonAmount, Owner.Creature, this);
+        await PowerCmd.Apply<BanePower>(choiceContext, Owner.Creature, poisonLoss, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
